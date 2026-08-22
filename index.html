@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio de Evidencias - Seguridad Informática</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Fira+Code:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Contenedor con animación de entrada -->
+    <div class="pokedex-container fade-in">
+        
+        <!-- ENCABEZADO (HEADER) -->
+        <header class="pokedex-header">
+            <!-- Sección Superior: Lente y Leds -->
+            <div class="top-indicator">
+                <div class="pokedex-lens pulse"></div>
+                <div class="pokedex-led red blink-1"></div>
+                <div class="pokedex-led yellow blink-2"></div>
+                <div class="pokedex-led green blink-3"></div>
+            </div>
+
+            <!-- Sección Inferior: Datos divididos en dos columnas -->
+            <div class="header-info-split">
+                <!-- Izquierda: Nombre -->
+                <div class="user-profile">
+                    <h1>Luis Emmanuel Aronia Silva</h1>
+                </div>
+                
+                <!-- Derecha: Institución, Materia y Botones -->
+                <div class="academic-details">
+                    <h2>CNO IV – Programacion WAP</h2>
+                    <p>Universidad Politécnica de San Luis Potosí | Semestre: Noveno</p>
+                    <nav class="pokedex-nav">
+                        <ul>
+                            <li><a href="#inicio">Inicio</a></li>
+                            <li><a href="#evidencias">Evidencias</a></li>
+                            <li><a href="#contacto">Contacto</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- PANTALLA PRINCIPAL (CONTENIDO) -->
+        <main class="pokedex-screen">
+            
+            <section id="inicio" class="content-section">
+                <h3>Presentación del Portafolio</h3>
+                <p><strong>Propósito:</strong> Este portafolio digital tiene como objetivo documentar de manera técnica y estructurada las evidencias de aprendizaje, prácticas y análisis desarrollados durante el curso.</p>
+                <p><strong>Enfoque del curso:</strong> El contenido se centra en la seguridad informática, abordando metodologías de pruebas de penetración (Pentesting), auditorías de sistemas y el análisis detallado de vulnerabilidades en infraestructuras tecnológicas.</p>
+                <p><strong>Importancia:</strong> Funciona como un repositorio auditable que demuestra la evolución, comprensión teórica y aplicación práctica de los conocimientos adquiridos en ciberseguridad.</p>
+            </section>
+
+            <section id="perfil" class="content-section">
+                <h3>Perfil del Estudiante</h3>
+                <p><strong>Semblanza Académica:</strong> Estudiante de ingeniería con un enfoque analítico hacia la protección de datos y la arquitectura de sistemas seguros. Apasionado por comprender cómo funcionan las tecnologías a bajo nivel para asegurar su integridad.</p>
+                <p><strong>Intereses:</strong> Seguridad ofensiva, inteligencia de amenazas cibernéticas (CTI) y análisis de vulnerabilidades.</p>
+            </section>
+
+            <section id="tecnica" class="content-section technical-info">
+                <h3>Especificaciones del Sitio</h3>
+                <ul>
+                    <li><strong>Lenguajes:</strong> HTML5, CSS3 (Flexbox, Animaciones Keyframes).</li>
+                    <li><strong>Plataforma:</strong> GitHub Pages.</li>
+                    <li><strong>Control de versiones:</strong> Git / GitHub.</li>
+                    <li><strong>Seguridad:</strong> Certificado SSL/TLS (HTTPS).</li>
+                </ul>
+            </section>
+
+            <section id="contacto" class="content-section">
+                <h3>Interfaz de Contacto</h3>
+                <form action="https://formsubmit.co/182979@upslp.edu.mx" method="POST" class="contact-form">
+                    <label for="name">Nombre / Entidad:</label>
+                    <input type="text" id="name" name="name" required>
+                    
+                    <label for="email">Correo Electrónico:</label>
+                    <input type="email" id="email" name="email" required>
+                    
+                    <label for="message">Mensaje / Consulta:</label>
+                    <textarea id="message" name="message" rows="3" required></textarea>
+                    
+                    <input type="hidden" name="_autoresponse" value="He recibido tu mensaje en mi portafolio. Me pondré en contacto contigo a la brevedad.">
+                    <input type="hidden" name="_subject" value="Mensaje desde Portafolio">
+                    <button type="submit" class="btn-submit">Enviar Datos</button>
+                </form>
+            </section>
+
+        </main>
+    </div>
+
+</body>
+</html>

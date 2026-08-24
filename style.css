@@ -72,6 +72,7 @@ h1, h2, h3, .card-number, .alias {
 }
 
 /* Navegación */
+/* --- NAVEGACIÓN PRINCIPAL --- */
 .luxury-nav ul {
     list-style: none;
     padding: 0;
@@ -79,6 +80,10 @@ h1, h2, h3, .card-number, .alias {
     display: flex;
     justify-content: center;
     gap: 45px;
+}
+
+.luxury-nav > ul > li {
+    position: relative; /* Contexto de posicionamiento para el desplegable */
 }
 
 .luxury-nav a {
@@ -94,6 +99,68 @@ h1, h2, h3, .card-number, .alias {
 
 .luxury-nav a:hover {
     border-bottom: 1px solid var(--accent-medium);
+}
+
+/* --- MENÚ DESPLEGABLE CORREGIDO --- */
+.luxury-nav ul li.dropdown {
+    display: inline-block;
+}
+
+.luxury-nav .dropdown-menu {
+    display: none; /* Oculto por defecto de manera estricta */
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #FFFFFF; 
+    border: 1px solid var(--accent-light);
+    box-shadow: 0 15px 30px rgba(124, 95, 121, 0.08); 
+    min-width: 170px;
+    padding: 10px 0; 
+    margin: 0;
+    list-style: none;
+    z-index: 1000;
+    border-radius: 4px;
+}
+
+/* Puente invisible para evitar que se cierre al mover el cursor */
+.luxury-nav .dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -15px; 
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background: transparent;
+}
+
+/* Mostrar el menú únicamente al hacer hover sobre el elemento padre */
+.luxury-nav .dropdown:hover .dropdown-menu {
+    display: block !important;
+}
+
+.luxury-nav .dropdown-menu li {
+    display: block;
+    margin: 0;
+}
+
+.luxury-nav .dropdown-menu li a {
+    color: var(--text-main);
+    padding: 10px 20px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    border: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.luxury-nav .dropdown-menu li a:hover {
+    background-color: var(--accent-light);
+    color: var(--accent-dark);
+    border: none;
 }
 
 .evidence-card {

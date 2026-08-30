@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 04 - Parcial 1 | Seguridad Informática</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>Actividad 04</h1>
+                <p class="alias">"Una Pagina Demasiado Convincente"</p>
+                <h2>Parcial 1 – Seguridad Informática</h2>
+                <p class="institution">
+                    <a href="index.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al Listado del Parcial 1</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section class="evidence-card" style="text-align: center; border-left: 4px solid var(--accent-dark);">
+                <div class="card-number">PDF</div>
+                <h3>Documentación Completa</h3>
+                <p>Si deseas consultar el informe detallado de la práctica con todas las capturas de resultados y conclusiones formales, puedes descargarlo en formato PDF:</p>
+                
+                <a href="Informe_Actividad_04.pdf" download class="btn-luxury" style="display: inline-block; text-decoration: none; margin-top: 15px;">
+                    Descargar Informe PDF 📄
+                </a>
+            </section>
+
+            <section class="evidence-card">
+                <div class="card-number">01</div>
+                <h3>Objetivo de la Práctica</h3>
+                <p>
+                    Implementar y analizar, en un entorno de laboratorio controlado, una simulación de 
+                    ingeniería social mediante <strong>Social-Engineer Toolkit (SET)</strong>, utilizando 
+                    una página web ficticia para comprender el funcionamiento de una técnica de captura 
+                    de información (Credential Harvester) y reconocer los elementos que permiten 
+                    identificar un intento de phishing.
+                </p>            
+            </section>
+
+            <section class="evidence-card">
+                <div class="card-number">02</div>
+                <h3>Desarrollo</h3>
+                <p>
+                Se elaboró una página HTML ficticia que simulaba un portal institucional de autenticación 
+                (con logotipo, campos de usuario/contraseña y mensaje de sesión expirada). Posteriormente 
+                se configuró <strong>Social-Engineer Toolkit</strong> en la ruta:
+                </p>
+                <ul>
+                    <li>Social-Engineering Attacks → Website Attack Vectors → Credential Harvester Attack Method → Custom Import</li>
+                </ul>
+
+                <p>
+                    Se importó el archivo <code>index.html</code> y se levantó el harvester en el puerto 80 
+                    utilizando la IP local de la máquina Kali. Al acceder desde el navegador e ingresar 
+                    credenciales de prueba, SET interceptó la petición POST, extrajo los datos y los 
+                    registró tanto en pantalla como en archivos locales.
+                </p>
+
+                <p>
+                    Durante el análisis se identificaron los siguientes indicadores de phishing:
+                </p>
+                <ul>
+                    <li>Uso de IP o dominio inventado</li>
+                    <li>Conexión HTTP (sin cifrado)</li>
+                    <li>Ausencia de candado de seguridad</li>
+                    <li>Mensaje genérico de “sesión expirada”</li>
+                    <li>Atributo <code>action="#"</code> en el formulario</li>
+                </ul>
+
+                <p>
+                    Como controles de seguridad se propusieron: verificación de URL, inspección del tráfico 
+                    (F12), uso de gestores de contraseñas, exigencia de HTTPS y revisión del código fuente 
+                    del formulario.
+                </p>
+            </section>
+
+
+            <section class="evidence-card">
+                <div class="card-number">04</div>
+                <h3>Conclusiones</h3>
+                <p>
+                    La práctica permitió comprender el funcionamiento del módulo Credential Harvester de SET 
+                    y el flujo completo de un ataque de phishing por captura de credenciales. Se evidenció 
+                    que una página con apariencia institucional puede resultar convincente, pero existen 
+                    indicadores técnicos claros (dominio, protocolo, código del formulario, etc.) que 
+                    facilitan su detección.
+                    </p>
+                    
+                    <p>
+                        Los controles más efectivos combinan la concientización del usuario con medidas técnicas 
+                        como gestores de contraseñas, verificación de HTTPS y, especialmente, la autenticación 
+                        multifactor (MFA). Este tipo de ejercicios deben realizarse únicamente en entornos 
+                        controlados y con fines educativos.
+                    </p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 1 - Portafolio de Evidencias.</p>
+        </footer>
+    </div>
+</body>
+</html>

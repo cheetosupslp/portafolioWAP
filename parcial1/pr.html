@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walkthrough Snakeoil - Parcial 1 | Fundamentos de Ciberseguridad</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>PR - De la teoría a la práctica</h1>
+                <p class="alias">"Walkthrough en acción: digitalworld.local Snakeoil"</p>
+                <h2>Parcial 1 – Fundamentos de Ciberseguridad</h2>
+                <p class="institution">
+                    <a href="index.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al Listado del Parcial 1</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+
+            <!-- ========== DESCARGA DEL INFORME PDF ========== -->
+            <section class="evidence-card" style="text-align: center; border-left: 4px solid var(--accent-dark);">
+                <div class="card-number">PDF</div>
+                <h3>Documentación Completa</h3>
+                <p>
+                    Si deseas consultar el informe detallado de la práctica con todas las capturas de resultados, 
+                    metodología y conclusiones formales, puedes descargarlo en formato PDF:
+                </p>
+                
+                <a href="Informe_Snakeoil.pdf" download class="btn-luxury" style="display: inline-block; text-decoration: none; margin-top: 15px;">
+                    Descargar Informe PDF 📄
+                </a>
+            </section>
+
+            <!-- ========== OBJETIVO ========== -->
+            <section class="evidence-card">
+                <div class="card-number">01</div>
+                <h3>Objetivo de la Práctica</h3>
+                <p>
+                    Demostrar la capacidad de aplicar conocimientos teóricos de seguridad informática 
+                    en un entorno práctico, mediante la realización de un walkthrough detallado sobre 
+                    la máquina vulnerable <strong>digitalworld.local: snakeoil</strong> de VulnHub. 
+                    El objetivo incluye el reconocimiento, enumeración, explotación, escalada de privilegios 
+                    y post-explotación, documentando cada fase y relacionando las técnicas utilizadas 
+                    con los fundamentos teóricos de ciberseguridad.
+                </p>
+            </section>
+
+            <!-- ========== DESARROLLO ========== -->
+            <section class="evidence-card">
+                <div class="card-number">02</div>
+                <h3>Desarrollo</h3>
+                
+                <p>
+                    Se realizó un pentest completo siguiendo las fases metodológicas de reconocimiento, 
+                    enumeración, explotación y post-explotación sobre la máquina Snakeoil.
+                </p>
+
+                <h4>Fases realizadas:</h4>
+                <ul>
+                    <li><strong>Reconocimiento:</strong> Descubrimiento de la IP y escaneo de puertos con nmap y arp-scan.</li>
+                    <li><strong>Enumeración:</strong> Análisis de los servicios web en los puertos 80 y 8080, descubrimiento de endpoints con Gobuster.</li>
+                    <li><strong>Explotación:</strong> Registro de usuario, obtención de JWT, extracción de secret_key y explotación de Command Injection en el endpoint /run.</li>
+                    <li><strong>Acceso inicial:</strong> SSH como usuario patrick utilizando la contraseña encontrada en app.py.</li>
+                    <li><strong>Escalada de privilegios:</strong> Uso de sudo (ALL:ALL) para obtener shell de root.</li>
+                    <li><strong>Post-explotación:</strong> Demostración de control del sistema y establecimiento de persistencia mediante llave SSH.</li>
+                </ul>
+
+                <h4>Comandos principales utilizados:</h4>
+                <pre><code>
+<!-- Aquí vamos a poner los comandos cuando me los pases -->
+                </code></pre>
+
+            </section>
+
+            <!-- ========== CONCLUSIONES ========== -->
+            <section class="evidence-card">
+                <div class="card-number">03</div>
+                <h3>Conclusiones</h3>
+                <p>
+                    La práctica permitió aplicar de forma integral la metodología de pentesting, 
+                    desde el reconocimiento hasta la post-explotación. Se identificaron vulnerabilidades 
+                    críticas en la aplicación Flask (método HTTP incorrecto, exposición de secretos, 
+                    Command Injection y reutilización de contraseñas), lo que facilitó el compromiso 
+                    completo del sistema.
+                </p>
+                <p>
+                    Se evidenció la importancia de validar correctamente las entradas de usuario, 
+                    no hardcodear secretos en el código fuente y configurar adecuadamente los privilegios 
+                    de sudo. El ejercicio reforzó la relación entre los conceptos teóricos de seguridad 
+                    ofensiva y su aplicación práctica en un entorno controlado.
+                </p>
+            </section>
+
+            <!-- ========== VIDEO (lo agregaremos después) ========== -->
+            <!-- 
+            <section class="evidence-card">
+                <div class="card-number">VIDEO</div>
+                <h3>Video Walkthrough</h3>
+                <p>A continuación se presenta el video completo del walkthrough:</p>
+                
+                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+                    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+                            src="AQUI_VA_EL_LINK_DEL_VIDEO" 
+                            frameborder="0" allowfullscreen>
+                    </iframe>
+                </div>
+            </section>
+            -->
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 1 - Portafolio de Evidencias.</p>
+        </footer>
+    </div>
+</body>
+</html>

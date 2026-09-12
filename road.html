@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road to Hall of Fame - Portafolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        
+        .timeline-wrapper {
+            position: relative;
+            max-width: 1100px;
+            margin: 70px auto 100px;
+            padding: 40px 0 60px;
+        }
+
+        .timeline-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                var(--accent-medium) 8%,
+                var(--accent-dark) 50%,
+                var(--accent-medium) 92%,
+                transparent 100%
+            );
+            border-radius: 4px;
+            box-shadow: 0 0 18px rgba(124, 95, 121, 0.25);
+        }
+
+        .timeline-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background-image: radial-gradient(circle, var(--accent-dark) 1.5px, transparent 1.5px);
+            background-size: 4px 28px;
+            background-repeat: repeat-y;
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .timeline-row {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            margin-bottom: 90px;
+            opacity: 0;
+        }
+
+        .timeline-row.left {
+            justify-content: flex-start;
+        }
+        .timeline-row.right {
+            justify-content: flex-end;
+        }
+
+        .timeline-card-container {
+            width: 46%;
+            display: flex;
+        }
+
+        .timeline-row.left .timeline-card-container {
+            justify-content: flex-end;
+            padding-right: 55px;
+        }
+        .timeline-row.right .timeline-card-container {
+            justify-content: flex-start;
+            padding-left: 55px;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            width: 20px;
+            height: 20px;
+            background-color: var(--card-bg);
+            border: 3px solid var(--accent-dark);
+            box-shadow: 0 0 0 6px rgba(124, 95, 121, 0.12),
+                        0 0 20px rgba(124, 95, 121, 0.35);
+            z-index: 10;
+            transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .timeline-row:hover .timeline-marker {
+            background-color: var(--accent-dark);
+            transform: translate(-50%, -50%) rotate(225deg) scale(1.35);
+            box-shadow: 0 0 0 10px rgba(124, 95, 121, 0.18),
+                        0 0 30px var(--accent-medium);
+        }
+
+        .timeline-card {
+            width: 100%;
+            max-width: 430px;
+            background: var(--card-bg);
+            border: 1px solid var(--accent-light);
+            padding: 28px 28px 26px;
+            position: relative;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.05);
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .timeline-card::before {
+            content: '';
+            position: absolute;
+            top: 6px; left: 6px; right: 6px; bottom: 6px;
+            border: 1px solid rgba(124, 95, 121, 0.15);
+            pointer-events: none;
+            transition: border-color 0.45s ease;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 28px 55px rgba(124, 95, 121, 0.18);
+            border-color: var(--accent-medium);
+        }
+
+        .timeline-card:hover::before {
+            border-color: var(--accent-medium);
+        }
+
+        .lab-number {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.15rem;
+            color: var(--accent-medium);
+            margin-bottom: 4px;
+            display: block;
+            letter-spacing: 0.5px;
+        }
+
+        .timeline-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.45rem;
+            color: var(--accent-dark);
+            margin: 0 0 14px 0;
+            line-height: 1.3;
+        }
+
+        .timeline-card p {
+            font-size: 0.9rem;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            opacity: 0.88;
+            line-height: 1.55;
+        }
+
+        .interactive-media {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            border: 1px solid var(--accent-light);
+            cursor: pointer;
+        }
+
+        .interactive-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .interactive-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(30, 25, 30, 0.88);
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            opacity: 0;
+            transition: all 0.45s ease;
+            z-index: 2;
+        }
+
+        .timeline-card:hover .interactive-media img {
+            transform: scale(1.12);
+        }
+
+        .interactive-media:hover .interactive-overlay {
+            opacity: 1;
+        }
+
+        .action-btn {
+            padding: 11px 22px;
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.72rem;
+            text-decoration: none;
+            transition: all 0.35s ease;
+            width: 72%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn:hover {
+            background: #fff;
+            color: var(--accent-dark);
+            border-color: #fff;
+            box-shadow: 0 0 22px rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-70px) translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(70px) translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) translateY(0);
+            }
+        }
+
+        .timeline-row.left {
+            animation: slideInLeft 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .timeline-row.right {
+            animation: slideInRight 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .timeline-row:nth-child(1) { animation-delay: 0.15s; }
+        .timeline-row:nth-child(2) { animation-delay: 0.35s; }
+        .timeline-row:nth-child(3) { animation-delay: 0.55s; }
+        .timeline-row:nth-child(4) { animation-delay: 0.75s; }
+        .timeline-row:nth-child(5) { animation-delay: 0.95s; }
+        .timeline-row:nth-child(6) { animation-delay: 1.15s; }
+
+        @keyframes markerPulse {
+            0%, 100% { box-shadow: 0 0 0 6px rgba(124, 95, 121, 0.12), 0 0 20px rgba(124, 95, 121, 0.3); }
+            50% { box-shadow: 0 0 0 10px rgba(124, 95, 121, 0.2), 0 0 28px rgba(124, 95, 121, 0.45); }
+        }
+
+        .timeline-marker {
+            animation: markerPulse 3.5s ease-in-out infinite;
+        }
+
+        @media (max-width: 850px) {
+            .timeline-wrapper::before,
+            .timeline-wrapper::after {
+                left: 22px;
+            }
+            .timeline-row.left,
+            .timeline-row.right {
+                justify-content: flex-start;
+            }
+            .timeline-card-container {
+                width: 100%;
+                padding-left: 55px !important;
+                padding-right: 0 !important;
+                justify-content: flex-start !important;
+            }
+            .timeline-marker {
+                left: 22px;
+            }
+            .timeline-card {
+                max-width: 100%;
+            }
+            .timeline-row {
+                margin-bottom: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>Road to Hall of Fame</h1>
+                <p class="alias">"PortSwigger Labs & Burp Suite"</p>
+                <h2>Módulo Interactivo de Pruebas de Penetración Web</h2>
+                <p class="institution">
+                    <a href="index.html" style="color: var(--accent-dark); text-decoration: none; font-size: 0.9rem; letter-spacing: 1px;">← VOLVER AL INICIO</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-main); margin-bottom: 50px; max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.8;">
+                Explora la ruta de progreso estructurada. Cada nodo representa la superación de un entorno de seguridad web. Pasa el cursor sobre las evidencias para desplegar el menú de acciones de cada laboratorio.
+            </p>
+            
+            <div class="timeline-wrapper">
+                
+                <!-- Lab 01 (IZQUIERDA) -->
+                <div class="timeline-row left">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-card-container">
+                        <div class="timeline-card">
+                            <span class="lab-number">Laboratorio 01</span>
+                            <h3>SQL Injection: Bypass Authentication</h3>
+                            <p><strong>Vector:</strong> Explotación del panel de login mediante interceptación de parámetros. Construcción de una consulta tautológica para evadir los controles de acceso.</p>
+                            
+                            <div class="interactive-media">
+                                <img src="ruta/a/tu/imagen_lab1.jpg" alt="Evidencia Lab 01">
+                                <div class="interactive-overlay">
+                                    <a href="ruta/a/tu/informe_lab1.pdf" download class="action-btn">Descargar PDF</a>
+                                    <a href="https://portswigger.net/web-security/sql-injection/lab-login-bypass" target="_blank" class="action-btn">Acceder Lab</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lab 02 -->
+                <div class="timeline-row right">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-card-container">
+                        <div class="timeline-card">
+                            <span class="lab-number">Laboratorio 02</span>
+                            <h3>Reflected Cross-Site Scripting (XSS)</h3>
+                            <p><strong>Vector:</strong> Inyección de código JavaScript en parámetros de búsqueda. Análisis de la falta de sanitización y codificación de salida en la respuesta del DOM.</p>
+                            
+                            <div class="interactive-media">
+                                <img src="ruta/a/tu/imagen_lab2.jpg" alt="Evidencia Lab 02">
+                                <div class="interactive-overlay">
+                                    <a href="ruta/a/tu/informe_lab2.pdf" download class="action-btn">Descargar PDF</a>
+                                    <a href="https://portswigger.net/web-security/cross-site-scripting/reflected/lab-html-context-nothing-encoded" target="_blank" class="action-btn">Acceder Lab</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lab 03 -->
+                <div class="timeline-row left">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-card-container">
+                        <div class="timeline-card">
+                            <span class="lab-number">Laboratorio 03</span>
+                            <h3>OS Command Injection</h3>
+                            <p><strong>Vector:</strong> Concatenación de comandos del sistema operativo a través de un endpoint vulnerable en la tienda online para extraer variables de entorno.</p>
+                            
+                            <div class="interactive-media">
+                                <img src="ruta/a/tu/imagen_lab3.jpg" alt="Evidencia Lab 03">
+                                <div class="interactive-overlay">
+                                    <a href="#" download class="action-btn">Descargar PDF</a>
+                                    <a href="#" target="_blank" class="action-btn">Acceder Lab</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Road to Hall of Fame.</p>
+        </footer>
+    </div>
+</body>
+</html>

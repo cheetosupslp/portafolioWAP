@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Path Traversal Simple Case - Parcial 1 | Fundamentos de Ciberseguridad</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        pre {
+            background-color: #1a1b26; 
+            color: #a9b1d6;
+            padding: 16px 20px;
+            border-radius: 8px;
+            overflow-x: auto; 
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+            border-left: 4px solid #00ffcc; 
+            margin: 20px 0;
+        }
+        pre code {
+            color: #00ffcc; 
+            text-shadow: 0px 0px 3px rgba(0, 255, 204, 0.2);
+        }
+        pre::-webkit-scrollbar {
+            height: 8px;
+        }
+        pre::-webkit-scrollbar-track {
+            background: #101014;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        pre::-webkit-scrollbar-thumb {
+            background: #414868;
+            border-radius: 4px;
+        }
+        pre::-webkit-scrollbar-thumb:hover {
+            background: #00ffcc;
+        }
+    </style>
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>File Path Traversal – Simple Case</h1>
+                <p class="alias">"PortSwigger Web Security Academy"</p>
+                <h2>Parcial 1 – Fundamentos de Ciberseguridad</h2>
+                <p class="institution">
+                    <a href="index.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al Listado del Parcial 1</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+
+
+            <section class="evidence-card">
+                <div class="card-number">01</div>
+                <h3>Objetivo de la Práctica</h3>
+                <p>
+                    Demostrar la identificación y explotación de una vulnerabilidad de <strong>File Path Traversal</strong> 
+                    en su variante más simple, utilizando Burp Suite como herramienta principal. 
+                    El objetivo es recuperar el contenido del archivo <code>/etc/passwd</code> del servidor 
+                    mediante la manipulación del parámetro <code>filename</code> en las peticiones de imágenes 
+                    de la aplicación vulnerable de PortSwigger Web Security Academy.
+                </p>
+            </section>
+
+            <!-- 02 Marco Teórico -->
+            <section class="evidence-card">
+                <div class="card-number">02</div>
+                <h3>Marco Teórico</h3>
+                <p>
+                    <strong>File Path Traversal</strong> (también conocido como Directory Traversal) es una 
+                    vulnerabilidad de seguridad web que permite a un atacante acceder a archivos y directorios 
+                    fuera del directorio raíz previsto de la aplicación. Esto se logra mediante la manipulación 
+                    de parámetros que el servidor utiliza para construir rutas de archivos, generalmente usando 
+                    secuencias como <code>../</code> para subir niveles en el sistema de archivos.
+                </p>
+                <p>
+                    Esta vulnerabilidad compromete principalmente el principio de <strong>Confidencialidad</strong> 
+                    del modelo <strong>CIA</strong> (Confidencialidad, Integridad y Disponibilidad), ya que permite 
+                    la lectura no autorizada de archivos sensibles del servidor.
+                </p>
+                <p>
+                    Según el <strong>OWASP Top 10 2021</strong>, Path Traversal se encuentra dentro de la categoría 
+                    <strong>A01:2021 – Broken Access Control</strong>, una de las más críticas y frecuentes.
+                </p>
+                <p>
+                    <strong>Variantes principales:</strong>
+                </p>
+                <ul>
+                    <li><strong>Simple Path Traversal</strong>: No existe ningún tipo de filtrado (caso de este laboratorio).</li>
+                    <li><strong>Traversal con filtros</strong>: La aplicación intenta bloquear las secuencias <code>../</code>.</li>
+                    <li><strong>Absolute Path Bypass</strong>: Se utiliza una ruta absoluta en lugar de relativa.</li>
+                    <li><strong>Null Byte Injection</strong>: Se usa el carácter nulo (<code>%00</code>) para evadir validaciones.</li>
+                </ul>
+            </section>
+
+            <section class="evidence-card">
+                <div class="card-number">03</div>
+                <h3>Desarrollo</h3>
+                
+                <h4>1. Acceso al laboratorio</h4>
+                <p>
+                    Se accedió al laboratorio oficial de PortSwigger:
+                </p>
+                <pre><code>https://portswigger.net/web-security/file-path-traversal/lab-simple</code></pre>
+                <p>
+                    Al hacer clic en <strong>Access the lab</strong> se carga una aplicación de tienda en línea vulnerable.
+                </p>
+
+                <h4>2. Configuración de Burp Suite</h4>
+                <p>
+                    Se utilizó Burp Suite Community Edition. Se abrió el navegador integrado desde la pestaña 
+                    <strong>Proxy → Intercept → Open Browser</strong> para que todo el tráfico pasara a través del proxy.
+                </p>
+
+                <h4>3. Identificación del parámetro vulnerable</h4>
+                <p>
+                    Al navegar por los productos de la tienda se observó que las imágenes se cargan mediante 
+                    peticiones del tipo:
+                </p>
+                <pre><code>GET /image?filename=XX.jpg HTTP/1.1
+Host: xxxxxxxx.web-security-academy.net</code></pre>
+                <p>
+                    El parámetro <code>filename</code> es controlado por el usuario y se utiliza directamente 
+                    para construir la ruta del archivo en el servidor, convirtiéndolo en un vector de ataque 
+                    de Path Traversal.
+                </p>
+
+                <h4>4. Explotación</h4>
+                <p>Se siguió el siguiente procedimiento:</p>
+                <ol>
+                    <li>Se interceptó la petición de una imagen con <strong>Intercept is on</strong>.</li>
+                    <li>Se envió la petición a <strong>Repeater</strong> (clic derecho → Send to Repeater).</li>
+                    <li>Se modificó el valor del parámetro <code>filename</code> por el siguiente payload:</li>
+                </ol>
+                <pre><code>../../../etc/passwd</code></pre>
+                <p>La petición final quedó de la siguiente forma:</p>
+                <pre><code>GET /image?filename=../../../etc/passwd HTTP/1.1
+Host: xxxxxxxx.web-security-academy.net</code></pre>
+                <p>
+                    Al enviar la petición modificada, el servidor devolvió el contenido completo del archivo 
+                    <code>/etc/passwd</code>, resolviendo el laboratorio.
+                </p>
+            </section>
+
+            <section class="evidence-card">
+                <div class="card-number">04</div>
+                <h3>Explicación Técnica del Payload</h3>
+                <p>
+                    El payload utilizado fue:
+                </p>
+                <pre><code>../../../etc/passwd</code></pre>
+                <p>
+                    <strong>¿Por qué funciona?</strong>
+                </p>
+                <p>
+                    Las imágenes de la aplicación se almacenan normalmente en una ruta similar a:
+                </p>
+                <pre><code>/var/www/images/</code></pre>
+                <p>
+                    Cuando el servidor recibe el parámetro <code>filename=../../../etc/passwd</code>, 
+                    concatena este valor a la ruta base, resultando en:
+                </p>
+                <pre><code>/var/www/images/../../../etc/passwd</code></pre>
+                <p>
+                    Cada secuencia <code>../</code> indica al sistema operativo que suba un nivel en la 
+                    estructura de directorios:
+                </p>
+                <ul>
+                    <li>Primer <code>../</code> → sale de <code>/images/</code></li>
+                    <li>Segundo <code>../</code> → sale de <code>/www/</code></li>
+                    <li>Tercer <code>../</code> → sale de <code>/var/</code> y llega a la raíz del sistema (<code>/</code>)</li>
+                </ul>
+                <p>
+                    Finalmente, el servidor intenta leer el archivo <code>/etc/passwd</code>, el cual contiene 
+                    información de las cuentas de usuario del sistema Linux.
+                </p>
+                <p>
+                    En este laboratorio (<strong>Simple Case</strong>) no existe ningún tipo de filtrado ni 
+                    validación de la entrada, por lo que el ataque funciona de forma directa. Este es el 
+                    escenario más básico de Path Traversal.
+                </p>
+            </section>
+
+            <!-- 05 Conclusiones -->
+            <section class="evidence-card">
+                <div class="card-number">05</div>
+                <h3>Conclusiones</h3>
+                <p>
+                    En este laboratorio se demostró de forma práctica la existencia y explotación de una 
+                    vulnerabilidad de <strong>File Path Traversal</strong> en su variante más simple. 
+                    Mediante la manipulación del parámetro <code>filename</code> y el uso de secuencias de 
+                    recorrido de directorios (<code>../</code>), fue posible acceder al archivo sensible 
+                    <code>/etc/passwd</code> del servidor.
+                </p>
+                <p>
+                    Esta práctica refuerza la importancia de validar y sanitizar correctamente todas las 
+                    entradas de usuario que intervienen en la construcción de rutas de archivos, así como 
+                    de aplicar los principios de mínimo privilegio y control de acceso adecuados para 
+                    proteger la confidencialidad de la información del sistema.
+                </p>
+                <p>
+                    El uso de Burp Suite (Proxy + Repeater) resultó fundamental para interceptar, modificar 
+                    y analizar las peticiones de forma controlada y profesional.
+                </p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 1 - Portafolio de Evidencias.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -129,8 +129,7 @@
                     Al navegar por los productos de la tienda se observó que las imágenes se cargan mediante 
                     peticiones del tipo:
                 </p>
-                <pre><code>GET /image?filename=XX.jpg HTTP/1.1
-Host: xxxxxxxx.web-security-academy.net</code></pre>
+                <pre><code>GET /image?filename=XX.jpg HTTP/1.1</code></pre>
                 <p>
                     El parámetro <code>filename</code> es controlado por el usuario y se utiliza directamente 
                     para construir la ruta del archivo en el servidor, convirtiéndolo en un vector de ataque 
@@ -146,8 +145,7 @@ Host: xxxxxxxx.web-security-academy.net</code></pre>
                 </ol>
                 <pre><code>../../../etc/passwd</code></pre>
                 <p>La petición final quedó de la siguiente forma:</p>
-                <pre><code>GET /image?filename=../../../etc/passwd HTTP/1.1
-Host: xxxxxxxx.web-security-academy.net</code></pre>
+                <pre><code>GET /image?filename=../../../etc/passwd HTTP/1.1</code></pre>
                 <p>
                     Al enviar la petición modificada, el servidor devolvió el contenido completo del archivo 
                     <code>/etc/passwd</code>, resolviendo el laboratorio.

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Path Traversal – Absolute Path Bypass - Parcial 1 | Fundamentos de Ciberseguridad</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        pre {
+            background-color: #1a1b26; 
+            color: #a9b1d6;
+            padding: 16px 20px;
+            border-radius: 8px;
+            overflow-x: auto; 
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+            border-left: 4px solid #00ffcc; 
+            margin: 20px 0;
+        }
+        pre code {
+            color: #00ffcc; 
+            text-shadow: 0px 0px 3px rgba(0, 255, 204, 0.2);
+        }
+        pre::-webkit-scrollbar {
+            height: 8px;
+        }
+        pre::-webkit-scrollbar-track {
+            background: #101014;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        pre::-webkit-scrollbar-thumb {
+            background: #414868;
+            border-radius: 4px;
+        }
+        pre::-webkit-scrollbar-thumb:hover {
+            background: #00ffcc;
+        }
+    </style>
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>File Path Traversal – Absolute Path Bypass</h1>
+                <p class="alias">"PortSwigger Web Security Academy"</p>
+                <h2>Parcial 1 – Fundamentos de Ciberseguridad</h2>
+                <p class="institution">
+                    <a href="../road.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al Listado de Laboratorios</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <!-- PDF -->
+            <section class="evidence-card" style="text-align: center; border-left: 4px solid var(--accent-dark);">
+                <div class="card-number">PDF</div>
+                <h3>Documentación Completa</h3>
+                <p>
+                    Si deseas consultar el informe detallado de la práctica con todas las capturas de resultados 
+                    y conclusiones formales, puedes descargarlo en formato PDF:
+                </p>
+                
+                <a href="informe_lab2.pdf" download class="btn-luxury" style="display: inline-block; text-decoration: none; margin-top: 15px;">
+                    Descargar Informe PDF 📄
+                </a>
+            </section>
+            
+            <!-- 01 Objetivo -->
+            <section class="evidence-card">
+                <div class="card-number">01</div>
+                <h3>Objetivo de la Práctica</h3>
+                <p>
+                    Demostrar la identificación y explotación de una vulnerabilidad de <strong>File Path Traversal</strong> 
+                    en la que la aplicación bloquea las secuencias de recorrido (<code>../</code>), pero permite 
+                    el uso de rutas absolutas. El objetivo es recuperar el contenido del archivo 
+                    <code>/etc/passwd</code> mediante el bypass de la protección utilizando una ruta absoluta.
+                </p>
+            </section>
+
+            <!-- 02 Marco Teórico -->
+            <section class="evidence-card">
+                <div class="card-number">02</div>
+                <h3>Marco Teórico</h3>
+                <p>
+                    <strong>File Path Traversal</strong> (también conocido como Directory Traversal) es una 
+                    vulnerabilidad de seguridad web que permite a un atacante acceder a archivos y directorios 
+                    fuera del directorio raíz previsto de la aplicación. Esto se logra mediante la manipulación 
+                    de parámetros que el servidor utiliza para construir rutas de archivos.
+                </p>
+                <p>
+                    Esta vulnerabilidad compromete principalmente el principio de <strong>Confidencialidad</strong> 
+                    del modelo <strong>CIA</strong> (Confidencialidad, Integridad y Disponibilidad), ya que permite 
+                    la lectura no autorizada de archivos sensibles del servidor.
+                </p>
+                <p>
+                    Según el <strong>OWASP Top 10 2021</strong>, Path Traversal se encuentra dentro de la categoría 
+                    <strong>A01:2021 – Broken Access Control</strong>.
+                </p>
+                <p>
+                    En este laboratorio la aplicación implementa una defensa que <strong>bloquea las secuencias 
+                    <code>../</code></strong>, pero trata el nombre del archivo como relativo a un directorio 
+                    de trabajo por defecto. Esta protección incompleta puede ser evadida utilizando una 
+                    <strong>ruta absoluta</strong>.
+                </p>
+            </section>
+
+            <!-- 03 Desarrollo -->
+            <section class="evidence-card">
+                <div class="card-number">03</div>
+                <h3>Desarrollo</h3>
+                
+                <h4>1. Acceso al laboratorio</h4>
+                <p>
+                    Se accedió al laboratorio oficial de PortSwigger:
+                </p>
+                <pre><code>https://portswigger.net/web-security/file-path-traversal/lab-absolute-path-bypass</code></pre>
+                <p>
+                    Al hacer clic en <strong>Access the lab</strong> se carga una aplicación de tienda en línea vulnerable.
+                </p>
+
+                <h4>2. Configuración de Burp Suite</h4>
+                <p>
+                    Se utilizó Burp Suite Community Edition. Se abrió el navegador integrado desde la pestaña 
+                    <strong>Proxy → Intercept → Open Browser</strong> para que todo el tráfico pasara a través del proxy.
+                </p>
+
+                <h4>3. Identificación del parámetro vulnerable</h4>
+                <p>
+                    Al navegar por los productos de la tienda se observó que las imágenes se cargan mediante 
+                    peticiones del tipo:
+                </p>
+                <pre><code>GET /image?filename=XX.jpg HTTP/1.1</code></pre>
+                <p>
+                    El parámetro <code>filename</code> es controlado por el usuario y se utiliza para construir 
+                    la ruta del archivo en el servidor.
+                </p>
+
+                <h4>4. Prueba del payload del laboratorio anterior</h4>
+                <p>
+                    Se envió la petición a <strong>Repeater</strong> y se probaron las secuencias de recorrido:
+                </p>
+                <pre><code>../../../etc/passwd</code></pre>
+                <p>
+                    El servidor respondió con un error (<code>No such file</code>), confirmando que las 
+                    secuencias <code>../</code> están bloqueadas.
+                </p>
+
+                <h4>5. Explotación con ruta absoluta</h4>
+                <p>
+                    Se modificó el parámetro <code>filename</code> por una ruta absoluta:
+                </p>
+                <pre><code>/etc/passwd</code></pre>
+                <p>La petición final quedó de la siguiente forma:</p>
+                <pre><code>GET /image?filename=/etc/passwd HTTP/1.1</code></pre>
+                <p>
+                    Al enviar la petición, el servidor devolvió el contenido completo del archivo 
+                    <code>/etc/passwd</code>, resolviendo el laboratorio.
+                </p>
+            </section>
+
+            <!-- 04 Explicación del Payload -->
+            <section class="evidence-card">
+                <div class="card-number">04</div>
+                <h3>Explicación Técnica del Payload</h3>
+                <p>
+                    El payload utilizado fue:
+                </p>
+                <pre><code>/etc/passwd</code></pre>
+                <p>
+                    <strong>¿Por qué funciona?</strong>
+                </p>
+                <p>
+                    La aplicación bloquea las secuencias de recorrido de directorios (<code>../</code>). 
+                    Sin embargo, trata el valor del parámetro <code>filename</code> como relativo a un 
+                    directorio de trabajo por defecto.
+                </p>
+                <p>
+                    Al suministrar una <strong>ruta absoluta</strong> (que comienza con <code>/</code>), 
+                    el servidor la interpreta directamente desde la raíz del sistema de archivos, 
+                    saltándose completamente el filtro que solo eliminaba o bloqueaba las secuencias <code>../</code>.
+                </p>
+                <p>
+                    Este tipo de bypass demuestra que una protección incompleta (solo filtrar <code>../</code> 
+                    sin validar si la ruta es absoluta) no es suficiente para mitigar la vulnerabilidad de 
+                    Path Traversal.
+                </p>
+            </section>
+
+            <!-- 05 Conclusiones -->
+            <section class="evidence-card">
+                <div class="card-number">05</div>
+                <h3>Conclusiones</h3>
+                <p>
+                    En este laboratorio se demostró que bloquear únicamente las secuencias <code>../</code> 
+                    no es una defensa suficiente contra Path Traversal. Al utilizar una ruta absoluta 
+                    (<code>/etc/passwd</code> fue posible acceder al archivo sensible del sistema.
+                </p>
+                <p>
+                    Esta práctica refuerza la importancia de implementar validaciones robustas que no solo 
+                    filtren secuencias de recorrido, sino que también restrinjan el uso de rutas absolutas 
+                    y validen que los archivos solicitados se encuentren dentro de un directorio permitido 
+                    (lista blanca).
+                </p>
+                <p>
+                    El uso de Burp Suite (Proxy + Repeater) permitió identificar rápidamente la diferencia 
+                    de comportamiento entre el payload relativo y el absoluto.
+                </p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 1 - Portafolio de Evidencias.</p>
+        </footer>
+    </div>
+</body>
+</html>

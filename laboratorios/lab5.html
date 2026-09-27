@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Path Traversal – Validation of Start of Path - Parcial 1 | Fundamentos de Ciberseguridad</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        pre {
+            background-color: #1a1b26; 
+            color: #a9b1d6;
+            padding: 16px 20px;
+            border-radius: 8px;
+            overflow-x: auto; 
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+            border-left: 4px solid #00ffcc; 
+            margin: 20px 0;
+        }
+        pre code {
+            color: #00ffcc; 
+            text-shadow: 0px 0px 3px rgba(0, 255, 204, 0.2);
+        }
+        pre::-webkit-scrollbar {
+            height: 8px;
+        }
+        pre::-webkit-scrollbar-track {
+            background: #101014;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        pre::-webkit-scrollbar-thumb {
+            background: #414868;
+            border-radius: 4px;
+        }
+        pre::-webkit-scrollbar-thumb:hover {
+            background: #00ffcc;
+        }
+    </style>
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>File Path Traversal – Validation of Start of Path</h1>
+                <p class="alias">"PortSwigger Web Security Academy"</p>
+                <h2>Parcial 1 – Fundamentos de Ciberseguridad</h2>
+                <p class="institution">
+                    <a href="../road.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al Listado de Laboratorios</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <!-- PDF -->
+            <section class="evidence-card" style="text-align: center; border-left: 4px solid var(--accent-dark);">
+                <div class="card-number">PDF</div>
+                <h3>Documentación Completa</h3>
+                <p>
+                    Si deseas consultar el informe detallado de la práctica con todas las capturas de resultados 
+                    y conclusiones formales, puedes descargarlo en formato PDF:
+                </p>
+                
+                <a href="informe_lab5.pdf" download class="btn-luxury" style="display: inline-block; text-decoration: none; margin-top: 15px;">
+                    Descargar Informe PDF 📄
+                </a>
+            </section>
+            
+            <!-- 01 Objetivo -->
+            <section class="evidence-card">
+                <div class="card-number">01</div>
+                <h3>Objetivo de la Práctica</h3>
+                <p>
+                    Demostrar la identificación y explotación de una vulnerabilidad de <strong>File Path Traversal</strong> 
+                    en la que la aplicación valida que la ruta suministrada <strong>comience</strong> con una carpeta 
+                    específica (<code>/var/www/images</code>). El objetivo es recuperar el contenido del archivo 
+                    <code>/etc/passwd</code> respetando dicha validación y luego saliendo del directorio permitido.
+                </p>
+            </section>
+
+            <!-- 02 Marco Teórico -->
+            <section class="evidence-card">
+                <div class="card-number">02</div>
+                <h3>Marco Teórico</h3>
+                <p>
+                    <strong>File Path Traversal</strong> es una vulnerabilidad que permite a un atacante acceder 
+                    a archivos fuera del directorio permitido mediante la manipulación de parámetros que 
+                    construyen rutas de archivos.
+                </p>
+                <p>
+                    Esta vulnerabilidad afecta principalmente el principio de <strong>Confidencialidad</strong> 
+                    del modelo <strong>CIA</strong> y se encuentra catalogada dentro de 
+                    <strong>A01:2021 – Broken Access Control</strong> del OWASP Top 10.
+                </p>
+                <p>
+                    En este laboratorio la aplicación transmite la ruta completa del archivo y valida que 
+                    el valor del parámetro <strong>empiece</strong> con la carpeta esperada 
+                    (<code>/var/www/images</code>). Esta protección puede ser evadida manteniendo el prefijo 
+                    requerido y añadiendo secuencias de recorrido (<code>../</code>) después de él.
+                </p>
+            </section>
+
+            <!-- 03 Desarrollo -->
+            <section class="evidence-card">
+                <div class="card-number">03</div>
+                <h3>Desarrollo</h3>
+                
+                <h4>1. Acceso al laboratorio</h4>
+                <p>
+                    Se accedió al laboratorio oficial de PortSwigger:
+                </p>
+                <pre><code>https://portswigger.net/web-security/file-path-traversal/lab-validate-start-of-path</code></pre>
+                <p>
+                    Al hacer clic en <strong>Access the lab</strong> se carga una aplicación de tienda en línea vulnerable.
+                </p>
+
+                <h4>2. Configuración de Burp Suite</h4>
+                <p>
+                    Se utilizó Burp Suite Community Edition. Se abrió el navegador integrado desde la pestaña 
+                    <strong>Proxy → Intercept → Open Browser</strong> para que todo el tráfico pasara a través del proxy.
+                </p>
+
+                <h4>3. Identificación del parámetro vulnerable</h4>
+                <p>
+                    Al navegar por los productos se observó que las imágenes se cargan mediante peticiones que 
+                    incluyen la ruta completa:
+                </p>
+                <pre><code>GET /image?filename=/var/www/images/XX.jpg HTTP/1.1</code></pre>
+                <p>
+                    El parámetro <code>filename</code> es controlado por el usuario y se utiliza para construir 
+                    la ruta del archivo en el servidor. La aplicación valida que el valor comience con 
+                    <code>/var/www/images</code>.
+                </p>
+
+                <h4>4. Prueba de payloads anteriores</h4>
+                <p>
+                    Se probaron los payloads de los laboratorios anteriores:
+                </p>
+                <pre><code>../../../etc/passwd
+/etc/passwd
+....//....//....//etc/passwd
+..%252f..%252f..%252fetc/passwd</code></pre>
+                <p>
+                    Todos fallaron porque no cumplían con la validación de inicio de ruta.
+                </p>
+
+                <h4>5. Explotación respetando la validación</h4>
+                <p>
+                    Se modificó el parámetro <code>filename</code> por el siguiente payload:
+                </p>
+                <pre><code>/var/www/images/../../../etc/passwd</code></pre>
+                <p>La petición final quedó de la siguiente forma:</p>
+                <pre><code>GET /image?filename=/var/www/images/../../../etc/passwd HTTP/1.1</code></pre>
+                <p>
+                    Al enviar la petición, el servidor devolvió el contenido completo del archivo 
+                    <code>/etc/passwd</code>, resolviendo el laboratorio.
+                </p>
+            </section>
+
+            <!-- 04 Explicación del Payload -->
+            <section class="evidence-card">
+                <div class="card-number">04</div>
+                <h3>Explicación Técnica del Payload</h3>
+                <p>
+                    El payload utilizado fue:
+                </p>
+                <pre><code>/var/www/images/../../../etc/passwd</code></pre>
+                <p>
+                    <strong>¿Por qué funciona?</strong>
+                </p>
+                <p>
+                    La aplicación valida que el valor del parámetro <code>filename</code> 
+                    <strong>comience</strong> con la cadena:
+                </p>
+                <pre><code>/var/www/images</code></pre>
+                <p>
+                    Si el valor no empieza con esa ruta, la petición es rechazada.
+                </p>
+                <p>
+                    Al enviar <code>/var/www/images/../../../etc/passwd</code>:
+                </p>
+                <ol>
+                    <li>La validación se cumple (sí comienza con <code>/var/www/images</code>).</li>
+                    <li>Después el servidor procesa las secuencias <code>../</code>:</li>
+                </ol>
+                <ul>
+                    <li>Primer <code>../</code> → sale de <code>/images/</code></li>
+                    <li>Segundo <code>../</code> → sale de <code>/www/</code></li>
+                    <li>Tercer <code>../</code> → sale de <code>/var/</code> y llega a la raíz del sistema</li>
+                </ul>
+                <p>
+                    Finalmente se lee el archivo <code>/etc/passwd</code>.
+                </p>
+            </section>
+
+            <!-- 05 Conclusiones -->
+            <section class="evidence-card">
+                <div class="card-number">05</div>
+                <h3>Conclusiones</h3>
+                <p>
+                    En este laboratorio se demostró que validar únicamente que una ruta <strong>comience</strong> 
+                    con una carpeta específica no es una defensa suficiente. Al respetar el prefijo requerido 
+                    (<code>/var/www/images</code>) y añadir secuencias de recorrido fue posible acceder al 
+                    archivo <code>/etc/passwd</code>.
+                </p>
+                <p>
+                    Esta práctica refuerza la importancia de implementar validaciones más robustas, como 
+                    la canonicalización de rutas (resolver la ruta real antes de usarla) y el uso de 
+                    listas blancas de archivos permitidos.
+                </p>
+                <p>
+                    El uso de Burp Suite (Proxy + Repeater) permitió identificar rápidamente el formato 
+                    de la ruta completa y probar el payload de forma controlada.
+                </p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 1 - Portafolio de Evidencias.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 13 - Red Team Report: My File Server 1 | Seguridad Informática</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos adicionales para esta actividad */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .tool-item {
+            background: #f8f5f1;
+            border: 1px solid #e8dfd4;
+            border-radius: 6px;
+            padding: 12px 14px;
+            text-align: center;
+            font-size: 0.92rem;
+            color: #3d2a1c;
+            transition: all 0.2s ease;
+        }
+        .tool-item:hover {
+            background: #f0e9e0;
+            border-color: var(--accent-dark, #5a3e2b);
+        }
+        .tool-item strong {
+            display: block;
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+            color: var(--accent-dark, #5a3e2b);
+        }
+        .phase-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0 0 0;
+            counter-reset: phase;
+        }
+        .phase-list li {
+            position: relative;
+            padding: 12px 12px 12px 55px;
+            margin-bottom: 10px;
+            background: #f8f5f1;
+            border-radius: 6px;
+            border-left: 3px solid var(--accent-dark, #5a3e2b);
+        }
+        .phase-list li::before {
+            counter-increment: phase;
+            content: counter(phase, decimal-leading-zero);
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent-dark, #5a3e2b);
+            font-family: 'Playfair Display', serif;
+        }
+        .finding-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            background: #f8f5f1;
+            border-radius: 6px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            border-left: 4px solid #8b3a2a;
+        }
+        .finding-box.critical {
+            border-left-color: #7a1f1f;
+        }
+        .finding-sev {
+            flex-shrink: 0;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            color: #fff;
+            background: #8b3a2a;
+        }
+        .finding-box.critical .finding-sev {
+            background: #7a1f1f;
+        }
+        .finding-content strong {
+            display: block;
+            margin-bottom: 3px;
+            color: #3d2a1c;
+        }
+        .finding-content span {
+            font-size: 0.92rem;
+            color: #555;
+        }
+        .download-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 10px;
+        }
+        @media (max-width: 700px) {
+            .download-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .download-card {
+            background: #f8f5f1;
+            border: 1px solid #e8dfd4;
+            border-radius: 8px;
+            padding: 22px 20px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        .download-card:hover {
+            border-color: var(--accent-dark, #5a3e2b);
+            box-shadow: 0 4px 12px rgba(90, 62, 43, 0.1);
+        }
+        .download-card h4 {
+            margin: 0 0 8px 0;
+            font-family: 'Playfair Display', serif;
+            color: var(--accent-dark, #5a3e2b);
+        }
+        .download-card p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 16px;
+        }
+        .btn-luxury {
+            display: inline-block;
+            padding: 10px 22px;
+            background: var(--accent-dark, #5a3e2b);
+            color: #fff !important;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: background 0.2s ease;
+        }
+        .btn-luxury:hover {
+            background: #3d2a1c;
+        }
+        .risk-badge {
+            display: inline-block;
+            background: #7a1f1f;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 5px 14px;
+            border-radius: 4px;
+            margin-top: 8px;
+        }
+        .highlight-box {
+            background: #f0e9e0;
+            border-radius: 6px;
+            padding: 16px 18px;
+            margin-top: 12px;
+            border-left: 4px solid var(--accent-dark, #5a3e2b);
+        }
+    </style>
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>Actividad 13</h1>
+                <p class="alias">"Red Team Report: Pentesting de My File Server 1"</p>
+                <h2>Parcial 1 – Seguridad Informática</h2>
+                <p class="institution">
+                    <a href="index.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al Listado del Parcial 1</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+
+            <!-- DESCARGAS -->
+            <section class="evidence-card" style="border-left: 4px solid var(--accent-dark);">
+                <div class="card-number">↓</div>
+                <h3>Entregables de la Actividad</h3>
+                <p>
+                    Descarga los dos productos principales de esta evaluación Red Team: 
+                    el <strong>informe técnico profesional</strong> y la 
+                    <strong>presentación ejecutiva</strong> dirigida al Consejo Directivo.
+                </p>
+                
+                <div class="download-grid">
+                    <div class="download-card">
+                        <h4>Informe Técnico (PDF)</h4>
+                        <p>Reporte completo de pentesting con metodología, hallazgos, evidencias y recomendaciones.</p>
+                        <a href="Informe_RedTeam_MyFileServer1.pdf" download class="btn-luxury">
+                            Descargar Informe PDF 📄
+                        </a>
+                    </div>
+                    <div class="download-card">
+                        <h4>Presentación Ejecutiva (PPTX)</h4>
+                        <p>Presentación de 10 diapositivas orientada a la alta dirección, con enfoque de negocio y riesgo.</p>
+                        <a href="RedTeam_MyFileServer_Presentacion_Ejecutiva.pptx" download class="btn-luxury">
+                            Descargar Presentación 📊
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- OBJETIVO -->
+            <section class="evidence-card">
+                <div class="card-number">01</div>
+                <h3>Objetivo de la Actividad</h3>
+                <p>
+                    Desarrollar un informe técnico profesional de pruebas de penetración 
+                    (<em>Pentesting Report</em>) sobre la máquina vulnerable 
+                    <strong>My File Server: 1</strong> (VulnHub), aplicando una metodología 
+                    estructurada de evaluación de seguridad. Posteriormente, elaborar una 
+                    presentación ejecutiva orientada al Consejo Directivo de una organización.
+                </p>
+                <div class="highlight-box">
+                    <strong>Rol asumido:</strong> Analista Red Team contratado por la organización 
+                    para evaluar el nivel de exposición del sistema de archivos corporativo.
+                </div>
+            </section>
+
+            <!-- METODOLOGÍA -->
+            <section class="evidence-card">
+                <div class="card-number">02</div>
+                <h3>Metodología Aplicada</h3>
+                <p>
+                    La evaluación se realizó siguiendo el estándar 
+                    <strong>PTES (Penetration Testing Execution Standard)</strong>, 
+                    estructurado en las siguientes fases:
+                </p>
+                <ul class="phase-list">
+                    <li>
+                        <strong>Reconocimiento</strong><br>
+                        Identificación de hosts activos y superficie de ataque del segmento de red.
+                    </li>
+                    <li>
+                        <strong>Enumeración</strong><br>
+                        Análisis de servicios expuestos (FTP, SSH, HTTP, SMB) y obtención de información sensible.
+                    </li>
+                    <li>
+                        <strong>Explotación</strong><br>
+                        Uso de credenciales expuestas e inyección de clave SSH para obtener acceso inicial.
+                    </li>
+                    <li>
+                        <strong>Escalada de privilegios</strong><br>
+                        Explotación de vulnerabilidad local (Dirty COW – CVE-2016-5195) para obtener control total (root).
+                    </li>
+                    <li>
+                        <strong>Análisis de impacto y recomendaciones</strong><br>
+                        Evaluación del impacto bajo el modelo CIA y definición de un plan de remediación prioritizado.
+                    </li>
+                </ul>
+            </section>
+
+            <!-- HERRAMIENTAS -->
+            <section class="evidence-card">
+                <div class="card-number">03</div>
+                <h3>Herramientas Utilizadas</h3>
+                <p>
+                    Se emplearon herramientas estándar de la industria para cada fase de la evaluación:
+                </p>
+                <div class="tools-grid">
+                    <div class="tool-item">
+                        <strong>netdiscover</strong>
+                        Descubrimiento de hosts
+                    </div>
+                    <div class="tool-item">
+                        <strong>nmap</strong>
+                        Escaneo de puertos y servicios
+                    </div>
+                    <div class="tool-item">
+                        <strong>nikto</strong>
+                        Análisis del servicio web
+                    </div>
+                    <div class="tool-item">
+                        <strong>smbmap / smbclient</strong>
+                        Enumeración SMB
+                    </div>
+                    <div class="tool-item">
+                        <strong>ftp</strong>
+                        Acceso y transferencia de archivos
+                    </div>
+                    <div class="tool-item">
+                        <strong>ssh-keygen</strong>
+                        Generación de claves SSH
+                    </div>
+                    <div class="tool-item">
+                        <strong>gcc</strong>
+                        Compilación del exploit
+                    </div>
+                    <div class="tool-item">
+                        <strong>Dirty COW</strong>
+                        Escalada de privilegios
+                    </div>
+                </div>
+            </section>
+
+            <!-- HALLAZGOS PRINCIPALES -->
+            <section class="evidence-card">
+                <div class="card-number">04</div>
+                <h3>Hallazgos Principales</h3>
+                <p>
+                    Durante la evaluación se identificaron vulnerabilidades que permitieron 
+                    el <strong>compromiso total del sistema</strong>:
+                </p>
+
+                <div class="finding-box">
+                    <span class="finding-sev">ALTA</span>
+                    <div class="finding-content">
+                        <strong>Credenciales expuestas en texto plano</strong>
+                        <span>Archivo público en el servicio web contenía la contraseña del usuario del sistema.</span>
+                    </div>
+                </div>
+
+                <div class="finding-box">
+                    <span class="finding-sev">ALTA</span>
+                    <div class="finding-content">
+                        <strong>Acceso anónimo a servicios de archivos</strong>
+                        <span>FTP y SMB permitían acceso y escritura sin autenticación, exponiendo información sensible.</span>
+                    </div>
+                </div>
+
+                <div class="finding-box">
+                    <span class="finding-sev">ALTA</span>
+                    <div class="finding-content">
+                        <strong>Configuración deficiente de acceso remoto</strong>
+                        <span>Fue posible inyectar una clave SSH a través de FTP y obtener una sesión remota válida.</span>
+                    </div>
+                </div>
+
+                <div class="finding-box critical">
+                    <span class="finding-sev">CRÍTICA</span>
+                    <div class="finding-content">
+                        <strong>Vulnerabilidad de escalada de privilegios (Dirty COW)</strong>
+                        <span>El núcleo del sistema permitía elevar privilegios hasta obtener control total (root).</span>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 18px;">
+                    <span class="risk-badge">NIVEL DE RIESGO: CRÍTICO</span>
+                </div>
+            </section>
+
+            <!-- IMPACTO DE NEGOCIO -->
+            <section class="evidence-card">
+                <div class="card-number">05</div>
+                <h3>Impacto de Negocio</h3>
+                <p>
+                    Un atacante real que explotara estas vulnerabilidades podría:
+                </p>
+                <ul>
+                    <li><strong>Robar información</strong> confidencial almacenada en el servidor de archivos.</li>
+                    <li><strong>Modificar o eliminar</strong> datos críticos de la organización.</li>
+                    <li><strong>Utilizar el servidor como punto de pivote</strong> para atacar otros sistemas de la red interna.</li>
+                    <li><strong>Afectar la disponibilidad</strong> del servicio de archivos, impactando la operación diaria.</li>
+                </ul>
+                <div class="highlight-box">
+                    <strong>Modelo CIA:</strong> Confidencialidad → Crítico &nbsp;|&nbsp; 
+                    Integridad → Crítico &nbsp;|&nbsp; Disponibilidad → Alto
+                </div>
+            </section>
+
+            <!-- DESARROLLO Y RESULTADOS -->
+            <section class="evidence-card">
+                <div class="card-number">06</div>
+                <h3>Desarrollo y Resultados</h3>
+                <p>
+                    La práctica se realizó sobre la máquina virtual <strong>My File Server: 1</strong> 
+                    (VulnHub), simulando un entorno corporativo de servidor de archivos. 
+                    Se documentó de forma estructurada cada fase del proceso ofensivo, 
+                    desde el reconocimiento inicial hasta la obtención de privilegios de administrador.
+                </p>
+                <p>
+                    Como resultado, se elaboraron dos productos profesionales:
+                </p>
+                <ul>
+                    <li>
+                        <strong>Informe técnico</strong> con estructura ejecutiva y técnica, 
+                        tabla de hallazgos, análisis de impacto y recomendaciones de remediación.
+                    </li>
+                    <li>
+                        <strong>Presentación ejecutiva</strong> (10 diapositivas) orientada al 
+                        Consejo Directivo, con enfoque estratégico, gráficos de riesgo y roadmap de remediación.
+                    </li>
+                </ul>
+            </section>
+
+            <!-- CONCLUSIONES -->
+            <section class="evidence-card">
+                <div class="card-number">07</div>
+                <h3>Conclusiones</h3>
+                <p>
+                    Esta actividad permitió aplicar de forma integral una metodología formal de 
+                    pruebas de penetración, combinar análisis técnico con redacción profesional 
+                    y comunicar el riesgo en términos de negocio.
+                </p>
+                <p>
+                    Se evidenció que configuraciones deficientes (accesos anónimos, credenciales 
+                    expuestas y sistemas desactualizados) pueden derivar en el compromiso total 
+                    de un activo crítico. La capacidad de documentar y presentar estos hallazgos 
+                    de forma ejecutiva es una competencia esencial en el perfil de un profesional 
+                    de ciberseguridad.
+                </p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 1 - Portafolio de Evidencias.</p>
+        </footer>
+    </div>
+</body>
+</html>

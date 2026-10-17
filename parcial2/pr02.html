@@ -29,9 +29,9 @@
                 <h3>Descripción del proyecto</h3>
                 <p>
                     Auditoría de seguridad ofensiva realizada sobre el laboratorio INTERAFAS. 
-                    Se identificaron 20 vulnerabilidades técnicas que abarcan exposición de información, 
-                    fallas de control de acceso, inyección, manipulación de lógica de negocio y compromiso 
-                    de la red operacional (OT).
+                    Se identificaron 20 vulnerabilidades técnicas que abarcan exposición de información residual, 
+                    fallas de control de acceso (IDOR/BOLA), inyección SQL, XSS almacenado, fijación de sesión, 
+                    manipulación de lógica de negocio en pagos y compromiso de la red operacional (OT).
                 </p>
             </section>
 
@@ -72,21 +72,167 @@
             <section>
                 <h3>Vulnerabilidades identificadas</h3>
                 <div class="activity-list">
+
                     <a href="vulnerabilidades/vuln-01.html" class="activity-card-horizontal">
                         <div class="act-number">01</div>
                         <div class="act-info">
                             <h3>VULN-01</h3>
-                            <p>Exposición de archivos residuales</p>
+                            <p>Exposición de información sensible mediante archivos residuales</p>
                         </div>
                     </a>
+
                     <a href="vulnerabilidades/vuln-02.html" class="activity-card-horizontal">
                         <div class="act-number">02</div>
                         <div class="act-info">
                             <h3>VULN-02</h3>
-                            <p>Exposición de artefactos en frontend</p>
+                            <p>Exposición de artefactos de construcción y rutas API en frontend</p>
                         </div>
                     </a>
-                    <!-- Continúa el patrón hasta VULN-20 -->
+
+                    <a href="vulnerabilidades/vuln-03.html" class="activity-card-horizontal">
+                        <div class="act-number">03</div>
+                        <div class="act-info">
+                            <h3>VULN-03</h3>
+                            <p>Referencia directa insegura a objetos (IDOR) en expedientes y facturación</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-04.html" class="activity-card-horizontal">
+                        <div class="act-number">04</div>
+                        <div class="act-info">
+                            <h3>VULN-04</h3>
+                            <p>Exposición de código fuente mediante archivos de respaldo residuales</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-05.html" class="activity-card-horizontal">
+                        <div class="act-number">05</div>
+                        <div class="act-info">
+                            <h3>VULN-05</h3>
+                            <p>Divulgación de información sensible mediante manejo inadecuado de errores</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-06.html" class="activity-card-horizontal">
+                        <div class="act-number">06</div>
+                        <div class="act-info">
+                            <h3>VULN-06</h3>
+                            <p>Escalamiento de privilegios mediante manipulación de cookies</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-07.html" class="activity-card-horizontal">
+                        <div class="act-number">07</div>
+                        <div class="act-info">
+                            <h3>VULN-07</h3>
+                            <p>Inyección SQL ciega basada en booleanos en validación de referencias</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-08.html" class="activity-card-horizontal">
+                        <div class="act-number">08</div>
+                        <div class="act-info">
+                            <h3>VULN-08</h3>
+                            <p>Cross-Site Scripting almacenado (Stored XSS) en sistema de reportes</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-09.html" class="activity-card-horizontal">
+                        <div class="act-number">09</div>
+                        <div class="act-info">
+                            <h3>VULN-09</h3>
+                            <p>Salto de directorio (Path Traversal / LFI) en descarga de documentos</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-10.html" class="activity-card-horizontal">
+                        <div class="act-number">10</div>
+                        <div class="act-info">
+                            <h3>VULN-10</h3>
+                            <p>Fijación de sesión (Session Fixation)</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-11.html" class="activity-card-horizontal">
+                        <div class="act-number">11</div>
+                        <div class="act-info">
+                            <h3>VULN-11</h3>
+                            <p>Fuga de información sensible mediante encabezados HTTP personalizados</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-12.html" class="activity-card-horizontal">
+                        <div class="act-number">12</div>
+                        <div class="act-info">
+                            <h3>VULN-12</h3>
+                            <p>IDOR / BOLA en API de historial de servicios</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-13.html" class="activity-card-horizontal">
+                        <div class="act-number">13</div>
+                        <div class="act-info">
+                            <h3>VULN-13</h3>
+                            <p>Manipulación de parámetros y falla en lógica de negocio (pagos incompletos)</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-14.html" class="activity-card-horizontal">
+                        <div class="act-number">14</div>
+                        <div class="act-info">
+                            <h3>VULN-14</h3>
+                            <p>Falla lógica en la validación de vínculos contractuales</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-15.html" class="activity-card-horizontal">
+                        <div class="act-number">15</div>
+                        <div class="act-info">
+                            <h3>VULN-15</h3>
+                            <p>Fuga de información sensible en encabezados HTTP (API de infraestructura)</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-16.html" class="activity-card-horizontal">
+                        <div class="act-number">16</div>
+                        <div class="act-info">
+                            <h3>VULN-16</h3>
+                            <p>Evasión de controles de red mediante falsificación de IP</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-17.html" class="activity-card-horizontal">
+                        <div class="act-number">17</div>
+                        <div class="act-info">
+                            <h3>VULN-17</h3>
+                            <p>Control de acceso inconsistente y exposición de telemetría (Broken Access Control en API OT)</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-18.html" class="activity-card-horizontal">
+                        <div class="act-number">18</div>
+                        <div class="act-info">
+                            <h3>VULN-18</h3>
+                            <p>Criptografía insegura y falsificación de firmware en equipos OT</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-19.html" class="activity-card-horizontal">
+                        <div class="act-number">19</div>
+                        <div class="act-info">
+                            <h3>VULN-19</h3>
+                            <p>Exposición de topología y dependencias de la red operacional</p>
+                        </div>
+                    </a>
+
+                    <a href="vulnerabilidades/vuln-20.html" class="activity-card-horizontal">
+                        <div class="act-number">20</div>
+                        <div class="act-info">
+                            <h3>VULN-20</h3>
+                            <p>Alteración de parámetros operativos por falta de validación de límites</p>
+                        </div>
+                    </a>
+
                 </div>
             </section>
 

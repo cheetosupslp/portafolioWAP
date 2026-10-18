@@ -1,0 +1,90 @@
+Aquí tienes el código HTML para la **VULN-06**, estructurado bajo el mismo diseño de lujo y basado en tu documentación sobre el escalamiento de privilegios al manipular la cookie de rol (un hallazgo crítico que detallaste en tu matriz de riesgos).
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-06 — Escalamiento de privilegios por manipulación de cookie de rol</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-06</h1>
+                <p class="alias">"Escalamiento de privilegios por manipulación de cookie de rol"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    El sistema de autenticación de INTERAFAS determina el nivel de acceso del usuario 
+                    confiando ciegamente en el valor de una cookie enviada por el cliente (ej. <code>portal_role</code>), 
+                    permitiendo que una cuenta con permisos limitados acceda a funciones administrativas.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> Violación crítica del principio de confianza cero hacia el cliente. 
+                    El control de acceso (autorización) se delega al navegador del usuario en lugar de ser validado 
+                    exclusivamente del lado del servidor. Las decisiones de privilegio nunca deben basarse en parámetros 
+                    modificables externamente sin protección criptográfica o validación estricta de estado.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se inició sesión en el portal utilizando credenciales de un ciudadano estándar.</li>
+                    <li>Se interceptaron las peticiones HTTP y se identificó una cookie que definía el nivel de usuario (ej. <code>portal_role=user</code>).</li>
+                    <li>Utilizando las herramientas de desarrollador del navegador, se alteró el valor de la cookie a un rol privilegiado (ej. <code>portal_role=admin</code>).</li>
+                    <li>Al recargar la página, el sistema otorgó acceso completo a los menús y funciones de administración del sistema.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Nivel Crítico.</strong> El escalamiento vertical de privilegios compromete la integridad 
+                    y confidencialidad de todo el sistema. Un atacante con nivel de usuario base puede tomar el 
+                    control total de la plataforma, modificar facturaciones, extraer bases de datos completas o 
+                    desestabilizar los servicios operativos de la institución.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li>El nivel de privilegios y el rol del usuario deben determinarse exclusivamente del lado del servidor.</li>
+                    <li>Almacenar el rol autorizado dentro de la variable de estado segura del servidor (ej. <code>$_SESSION['role']</code> en PHP) tras una validación correcta en la base de datos.</li>
+                    <li>Eliminar de la arquitectura cualquier dependencia funcional de cookies o parámetros GET/POST en texto plano para tomar decisiones de control de acceso.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-WRONG-ROLE-06</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>
+
+```
+
+Solo recuerda colocar tu bandera exacta obtenida del laboratorio en la última sección de código. Dime con cuál continuamos.

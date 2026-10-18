@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-16 — Evasión de Control de Acceso por IP Spoofing (X-Forwarded-For)</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-16</h1>
+                <p class="alias">"Evasión de Control de Acceso por IP Spoofing en Gateway Operacional"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    El gateway operacional (<code>/operations/gateway.php</code>) restringe el acceso al sistema 
+                    basándose en la dirección IP de origen, declarando una política que bloquea las peticiones externas 
+                    y permite exclusivamente el tráfico del segmento interno (<code>10.40.20.0/24</code>). Sin embargo, 
+                    es posible evadir esta restricción falsificando la IP de origen.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> El servidor confía ciegamente en encabezados HTTP controlables por el 
+                    cliente (específicamente <code>X-Forwarded-For</code>) para determinar la dirección IP del usuario, 
+                    en lugar de utilizar la dirección IP real del socket de la conexión TCP a nivel de red. Esta es una 
+                    falla crítica de validación de identidad en arquitecturas que no sanitizan los encabezados de proxy.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se intentó acceder directamente al gateway, recibiendo un código <code>HTTP 403 Forbidden</code> y un mensaje que declaraba la política de restricción de red.</li>
+                    <li>Se identificó el segmento operacional objetivo (<code>OPS-NET-20 / 10.40.20.0/24</code>) obtenido en fases de reconocimiento previas.</li>
+                    <li>Se desarrolló un script en PowerShell utilizando <code>Invoke-WebRequest</code> para inyectar el encabezado de proxy <code>X-Forwarded-For: 10.40.20.10</code>.</li>
+                    <li>Al enviar la petición, el servidor omitió el bloqueo 403 y aceptó la solicitud como si proviniera legítimamente de la zona operacional interna.</li>
+                    <li>La prueba de concepto fue exitosa, revelando el token de validación en el encabezado de respuesta <code>X-INTERAFAS-Validation</code> (sin acceder aún a variables de proceso).</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Nivel Alto.</strong> Esta vulnerabilidad destruye la segmentación de red perimetral a nivel 
+                    de aplicación (Capa 7). Permite que un atacante completamente externo "cruce la frontera" y simule 
+                    estar físicamente dentro de la red OT/SCADA de la institución, obteniendo la puerta de entrada para 
+                    interactuar con sistemas de control y variables de proceso sin requerir credenciales.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li>Extraer la IP del cliente exclusivamente desde la capa de transporte (ej. <code>$_SERVER['REMOTE_ADDR']</code>) a menos que la petición provenga de un proxy reverso o balanceador de carga institucional debidamente configurado.</li>
+                    <li>Si la infraestructura requiere el uso de <code>X-Forwarded-For</code>, el backend debe validar primero que la IP que envía dicho encabezado pertenezca a una lista blanca (Whitelist) estricta de proxies confiables.</li>
+                    <li>Implementar una arquitectura Zero Trust: no confiar en las conexiones únicamente por su dirección IP o segmento de red; exigir autenticación mutua y validación de tokens de identidad en el gateway.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-BEYOND-THE-WEB-16</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>

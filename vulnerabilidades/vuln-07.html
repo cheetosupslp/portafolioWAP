@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-07 — Inyección SQL (SQLi) y exposición de base de datos</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-07</h1>
+                <p class="alias">"Inyección SQL (SQLi) y exposición de base de datos"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    Se identificó una vulnerabilidad crítica en los formularios de búsqueda y validación de referencias 
+                    del portal institucional. El sistema permite a un atacante inyectar y ejecutar sentencias SQL 
+                    arbitrarias directamente en el motor de base de datos a través de la entrada del usuario.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> Prácticas de codificación insegura, específicamente la concatenación 
+                    directa de cadenas de texto enviadas por el cliente dentro de las consultas SQL del backend, 
+                    sin realizar sanitización previa ni utilizar consultas parametrizadas (Prepared Statements).
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se identificó el endpoint de búsqueda o validación de referencias (ej. <code>validar-referencia.php</code>) interactuando con la base de datos.</li>
+                    <li>Se inyectó un payload de prueba lógica (ej. secuencias booleanas o cláusulas <code>UNION</code>) en el campo de entrada.</li>
+                    <li>Se observó un comportamiento anómalo en la respuesta, alterando la lógica original de la consulta.</li>
+                    <li>Se logró extraer información no autorizada, como registros de otros usuarios y estructura interna, confirmando la ejecución del código inyectado.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Nivel Crítico.</strong> Una inyección SQL permite evadir los controles de autenticación 
+                    y otorga acceso total de lectura, escritura y modificación sobre la base de datos. Esto facilita 
+                    un volcado masivo (dump) de Información de Identificación Personal (PII) ciudadana, historial 
+                    de consumos y datos financieros, materializando el peor escenario de filtración para la institución.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li>Implementar obligatoriamente Consultas Parametrizadas (Prepared Statements) utilizando librerías seguras como PDO en PHP para interactuar con la base de datos.</li>
+                    <li>Prohibir categóricamente la concatenación dinámica de variables de usuario directamente en las sentencias SQL.</li>
+                    <li>Aplicar el principio de mínimo privilegio a la cuenta de servicio de la base de datos, restringiendo permisos innecesarios como la ejecución de comandos del sistema operativo o eliminación de tablas estructurales.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-SILENT-ANSWER-07</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>

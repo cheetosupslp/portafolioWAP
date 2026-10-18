@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-11 — Path Traversal y Descarga Arbitraria de Archivos (LFI)</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-11</h1>
+                <p class="alias">"Path Traversal y Descarga Arbitraria de Archivos (LFI)"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    El módulo de descarga de documentos de transparencia de INTERAFAS permite a un atacante 
+                    manipular los parámetros de entrada para escapar del directorio público asignado y leer 
+                    archivos restringidos del sistema operativo, bitácoras de auditoría y configuraciones internas.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> Carencia de validación y sanitización en las entradas que 
+                    interactúan directamente con el sistema de archivos (File System). El servidor acepta secuencias 
+                    de salto de directorio (como <code>../</code>) sin normalizar la ruta ni verificar si el archivo 
+                    final se encuentra dentro de un entorno seguro o "sandbox" permitido[cite: 32].
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se identificó el endpoint responsable de servir documentos (ej. <code>descarga.php?file=reporte.pdf</code>).</li>
+                    <li>Se interceptó la petición y se inyectaron secuencias de navegación de directorios en el parámetro (ej. <code>../../../../etc/passwd</code> o rutas hacia logs).</li>
+                    <li>Se envió la petición manipulada al servidor.</li>
+                    <li>El servidor omitió la validación y devolvió en texto plano el contenido de archivos críticos de la infraestructura, confirmando la vulnerabilidad de Local File Inclusion (LFI).</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Nivel Crítico.</strong> Un Path Traversal o LFI expone la totalidad del sistema de 
+                    archivos local al atacante. Permite la lectura de bitácoras de auditoría (exponiendo posibles 
+                    credenciales o sesiones), archivos de configuración con contraseñas de bases de datos, y código 
+                    fuente del backend, allanando el camino para la toma de control absoluto del servidor.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li>No exponer nombres de archivo ni rutas directas a los usuarios; utilizar identificadores indirectos (ej. IDs alfanuméricos mapeados en la base de datos)[cite: 32].</li>
+                    <li>Si es estrictamente necesario utilizar nombres de archivo, extraer y conservar únicamente el nombre final utilizando funciones como <code>basename()</code>.</li>
+                    <li>Implementar una validación estricta de rutas con <code>realpath()</code>, asegurándose de que la ruta final resuelta comience exactamente con el directorio base permitido.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-HIDDEN-HISTORY-11</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>

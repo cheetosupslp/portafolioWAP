@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-02 — Fuga de credenciales mediante archivo de entorno (.env)</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-02</h1>
+                <p class="alias">"Fuga de credenciales mediante archivo de entorno (.env)"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    Durante la enumeración del servidor, se identificó que el portal permitía el listado de 
+                    directorios (Directory Listing) en rutas de configuración. Esto dejó expuesto públicamente 
+                    el archivo de variables de entorno (<code>.env</code>), revelando credenciales de la base de datos 
+                    y secretos de la aplicación en texto plano.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> Configuración insegura del servidor web que mantenía activado 
+                    el listado de índices (Directory Listing). Adicionalmente, el archivo de configuración 
+                    fue almacenado dentro de la raíz de documentos públicos (document root) sin reglas que 
+                    restringieran las peticiones HTTP hacia extensiones sensibles.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se exploraron los directorios del portal institucional mediante navegación directa.</li>
+                    <li>Se localizó un directorio de configuración con la funcionalidad de listado de índices habilitada.</li>
+                    <li>Se identificó el archivo oculto <code>.env</code> dentro del directorio expuesto.</li>
+                    <li>Se descargó y abrió el archivo, obteniendo las credenciales de conexión de la base de datos de INTERAFAS.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Nivel Crítico.</strong> La fuga de credenciales de infraestructura otorga a un atacante 
+                    las llaves directas de la base de datos. Esto facilita la exfiltración masiva de Información de 
+                    Identificación Personal (PII) de los ciudadanos, así como datos financieros y de facturación, 
+                    comprometiendo por completo la confidencialidad del organismo.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li>Deshabilitar globalmente el listado de directorios en el servidor web (ej. <code>Options -Indexes</code> en Apache).</li>
+                    <li>Mover todos los archivos de variables de entorno y secretos fuera de la raíz de documentos públicos (fuera de <code>/var/www/html/</code>).</li>
+                    <li>Implementar reglas de denegación de acceso para archivos ocultos y extensiones sensibles (como <code>.env</code>, <code>.ini</code>, <code>.bak</code>).</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-LOOK-CLOSER-02</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>

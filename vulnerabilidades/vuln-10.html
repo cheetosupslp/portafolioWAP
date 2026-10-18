@@ -1,0 +1,93 @@
+Aquí tienes el código HTML para la **VULN-10**, que en tu auditoría corresponde a la **Fijación de Sesión (Session Fixation)**, tal como documentaste en tus controles técnicos y en la erradicación de vulnerabilidades de tu Plan de Respuesta.
+
+Mantiene exactamente el mismo estilo de lujo y la estructura impecable de tu portafolio:
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-10 — Fijación de sesión y secuestro de cuenta (Session Fixation)</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-10</h1>
+                <p class="alias">"Fijación de sesión y secuestro de cuenta (Session Fixation)"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    Se detectó que el sistema de autenticación de INTERAFAS es vulnerable a ataques de fijación de sesión. 
+                    El portal permite que un atacante establezca un identificador de sesión (PHPSESSID) válido en el 
+                    navegador de la víctima antes de que esta inicie sesión, y el servidor mantiene ese mismo identificador 
+                    después de una autenticación exitosa.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> Carencia de regeneración del token de sesión. Tras comprobar las credenciales 
+                    de un usuario, el backend omite generar un nuevo identificador, elevando los privilegios de un ID 
+                    previamente conocido y controlable por un tercero.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se generó un identificador de sesión anónimo (no autenticado) en el servidor.</li>
+                    <li>Se forzó (inyectó) este identificador conocido en el navegador de la víctima mediante manipulación de cookies o parámetros.</li>
+                    <li>La víctima inició sesión legítimamente con sus credenciales.</li>
+                    <li>El servidor autenticó la sesión sin cambiar el PHPSESSID original.</li>
+                    <li>El atacante utilizó el ID de sesión pre-conocido para acceder a la cuenta de la víctima sin requerir contraseña.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Nivel Alto.</strong> Al igual que el secuestro tradicional, la fijación de sesión permite 
+                    la toma de control total de la cuenta de un ciudadano o administrador. Esto deriva en exposición 
+                    de datos financieros, capacidad de realizar fraudes y una violación a los controles de acceso 
+                    estipulados en el SGSI.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li>Implementar la regeneración obligatoria del identificador de sesión inmediatamente después de un inicio de sesión exitoso (ej. <code>session_regenerate_id(true)</code> en PHP).</li>
+                    <li>Configurar el servidor web para rechazar identificadores de sesión no generados internamente por el propio backend.</li>
+                    <li>Implementar políticas de expiración absoluta para invalidar sesiones antiguas y mitigar la ventana de oportunidad del atacante.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-WHO-ARE-YOU-10</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>
+
+```
+
+Solo recuerda sustituir el texto `[TU_BANDERA_10_AQUÍ]` con la flag que obtuviste. ¡Dime cuál es la siguiente bandera de tu portafolio que armaremos!

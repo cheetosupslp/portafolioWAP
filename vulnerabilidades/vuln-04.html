@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-04 — Exposición de código fuente mediante archivos de respaldo (.bak)</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-04</h1>
+                <p class="alias">"Exposición de código fuente mediante archivos de respaldo (.bak)"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    Durante la auditoría se descubrió que el servidor web entregaba en texto plano el código fuente 
+                    del backend de la aplicación al solicitar archivos con extensiones de copia de seguridad (como <code>.bak</code> o <code>.old</code>). 
+                    Estos archivos fueron generados por editores de texto directamente en el entorno de producción.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> Prácticas deficientes en la gestión del cambio y control de acceso al código fuente. 
+                    El servidor web está configurado para procesar e interpretar únicamente archivos <code>.php</code>, por lo que 
+                    cualquier otra extensión desconocida (como <code>.bak</code>) es servida directamente al cliente sin ejecutarse, 
+                    revelando su contenido íntegro.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se realizó un escaneo pasivo y enumeración de directorios en el portal institucional.</li>
+                    <li>Se identificaron archivos de lógica de negocio terminados en extensiones de respaldo (ej. <code>archivo.php.bak</code>).</li>
+                    <li>Se emitió una petición HTTP GET directa hacia el archivo identificado.</li>
+                    <li>El servidor web respondió con el código fuente del backend en texto claro, revelando consultas a base de datos y la estructura interna.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Nivel Alto.</strong> La exposición del código fuente representa un riesgo crítico de 
+                    reconocimiento avanzado (White-Box Testing). Permite a un actor malicioso analizar la lógica de 
+                    negocio sin interactuar a ciegas, facilitando el descubrimiento de vulnerabilidades complejas como 
+                    Inyecciones SQL (VULN-07) o fallas lógicas en las pasarelas de pago, además de exponer posibles 
+                    credenciales hardcodeadas.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li>Prohibir estrictamente la modificación de código directamente en los servidores de producción.</li>
+                    <li>Configurar el servidor web (ej. Apache <code>FilesMatch</code>) para denegar categóricamente el acceso HTTP a extensiones como <code>.bak</code>, <code>.old</code>, <code>.inc</code> y <code>.log</code>.</li>
+                    <li>Implementar procesos automatizados de CI/CD que garanticen despliegues limpios sin artefactos ni archivos temporales del entorno de desarrollo.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-OLD-MEMORIES-04</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>

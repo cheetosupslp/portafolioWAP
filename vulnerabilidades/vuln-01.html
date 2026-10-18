@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-01 — Exposición de información sensible mediante archivos residuales</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-01</h1>
+                <p class="alias">"Exposición de información sensible mediante archivos residuales"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    Durante el proceso de publicación del portal se dejaron expuestos archivos residuales de despliegue 
+                    (notas de release, checksums, manifiestos y tokens de validación) dentro de directorios públicos. 
+                    Estos artefactos no formaban parte de la funcionalidad prevista para los usuarios finales, pero 
+                    eran accesibles sin autenticación.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> Ausencia de controles de limpieza post-despliegue y falta de restricción 
+                    de acceso sobre directorios de documentación interna. El proceso de publicación no eliminó archivos 
+                    temporales ni restringió su acceso mediante configuración del servidor web.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se accedió al directorio público de documentos residuales del portal.</li>
+                    <li>Se identificaron archivos de release, checksums y manifiestos de construcción.</li>
+                    <li>Se recuperó un token de validación expuesto en los metadatos del despliegue.</li>
+                    <li>Se confirmó que el acceso no requería autenticación ni autorización previa.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    La exposición de estos artefactos permite a un atacante obtener información sobre el proceso de 
+                    despliegue, nombres de hosts internos, tokens de validación y posibles rutas adicionales. 
+                    Aunque no otorga acceso directo a datos de ciudadanos, facilita la enumeración y puede ser 
+                    utilizada como punto de partida para otros ataques.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li>Implementar un proceso de limpieza automática post-despliegue que elimine archivos temporales y de release.</li>
+                    <li>Restringir el acceso a directorios de documentación interna mediante configuración del servidor web.</li>
+                    <li>Separar los artefactos de construcción del directorio público servido a los usuarios.</li>
+                    <li>Revisar periódicamente el document root en busca de archivos no previstos.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-OPEN-DOOR-01</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>

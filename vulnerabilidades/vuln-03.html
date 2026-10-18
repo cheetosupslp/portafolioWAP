@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-03 — Exposición masiva de datos personales mediante IDOR (BOLA)</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-03</h1>
+                <p class="alias">"Exposición masiva de datos personales mediante IDOR (Broken Object Level Authorization)"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    El portal y las APIs de servicios ciudadanos permiten a un usuario autenticado consultar 
+                    los expedientes, historial de consumo y datos personales (PII) de cualquier otro ciudadano 
+                    simplemente alterando los parámetros de identificación en la URL o en el cuerpo de la petición.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> Ausencia de controles de autorización a nivel de objeto (BOLA/IDOR). 
+                    El servidor procesa la solicitud basándose únicamente en el ID proporcionado por el cliente, 
+                    sin validar en el backend si el recurso solicitado pertenece legítimamente al usuario 
+                    dueño de la sesión actual.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se inició sesión en el portal institucional con una cuenta de usuario estándar.</li>
+                    <li>Se interceptó la petición HTTP encargada de consultar el perfil o recibo de consumo.</li>
+                    <li>Se modificó el parámetro identificador (ej. <code>id</code> o <code>account</code>) por el de un tercero.</li>
+                    <li>El servidor devolvió la respuesta con la Información de Identificación Personal (PII) completa y el historial de consumo del otro usuario.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Nivel Crítico.</strong> Esta vulnerabilidad permite el "raspado" (scraping) o 
+                    exfiltración masiva de la base de datos de ciudadanos. La exposición de nombres, domicilios 
+                    e historiales financieros constituye una violación directa a la Ley de Protección de Datos 
+                    Personales (LFPDPPP), conllevando severas sanciones regulatorias y una crisis reputacional 
+                    inmediata para la institución.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li>Implementar una validación estricta de autorización a nivel de objeto (BOLA) en cada endpoint de la API.</li>
+                    <li>Asegurar que las consultas a la base de datos extraigan el identificador del usuario directamente de la sesión activa del servidor (<code>$_SESSION</code>), ignorando el ID enviado por el cliente.</li>
+                    <li>Sustituir el uso de identificadores secuenciales predecibles por Identificadores Únicos Universales (UUID) o hashes indirectos.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-NOT-YOURS-03</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>

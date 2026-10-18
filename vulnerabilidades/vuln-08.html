@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-08 — Cross-Site Scripting (XSS) Almacenado en sistema de reportes</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-08</h1>
+                <p class="alias">"Cross-Site Scripting (XSS) Almacenado en sistema de reportes"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    Se identificó que el módulo de atención y reportes ciudadanos guarda directamente en la base 
+                    de datos el contenido ingresado por el usuario y posteriormente lo renderiza en el navegador 
+                    de otros usuarios (y administradores) sin ningún tipo de filtrado o codificación.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> Carencia de sanitización de entrada y, fundamentalmente, la 
+                    ausencia de codificación de salida (Output Encoding). El sistema asume que el texto ingresado 
+                    es seguro y lo incrusta directamente en el DOM HTML, permitiendo que el navegador interprete 
+                    etiquetas de código en lugar de texto plano[cite: 43].
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se accedió a la sección de reportes ciudadanos del portal institucional.</li>
+                    <li>Se redactó un nuevo reporte inyectando un payload de prueba en JavaScript (ej. <code>&lt;script&gt;alert(document.cookie)&lt;/script&gt;</code>) dentro de los campos de texto.</li>
+                    <li>Se envió y guardó el reporte en la plataforma.</li>
+                    <li>Al visualizar el historial de reportes, el navegador del cliente interpretó y ejecutó silenciosamente el código inyectado, confirmando la persistencia de la vulnerabilidad[cite: 43].</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Nivel Alto.</strong> Al ser una inyección almacenada, el código malicioso se ejecutará 
+                    en el navegador de cualquier persona que visite la página afectada. Esto es especialmente crítico 
+                    si un administrador del Centro de Operaciones visualiza el reporte, ya que el atacante podría 
+                    secuestrar su sesión administrativa, forzar acciones en su nombre o redirigirlo a sitios maliciosos.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li>Implementar codificación de salida en el servidor antes de renderizar cualquier contenido generado por el usuario (ej. usar <code>htmlspecialchars()</code> con las banderas <code>ENT_QUOTES</code> y <code>ENT_HTML5</code> en PHP).</li>
+                    <li>Configurar una Política de Seguridad de Contenido (CSP) robusta mediante cabeceras HTTP, restringiendo la ejecución de scripts inline.</li>
+                    <li>Sanitizar las entradas de datos eliminando o neutralizando etiquetas HTML potencialmente peligrosas desde el momento en que se reciben en el backend[cite: 43].</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-STORED-WORDS-08</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>

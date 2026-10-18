@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-15 — Fuga de Información Sensible en Encabezados HTTP (API)</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-15</h1>
+                <p class="alias">"Fuga de Información Sensible en Encabezados HTTP (API de Infraestructura)"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    El endpoint que consulta el estado de los servicios de TI (<code>/api/infrastructure-status.php</code>) 
+                    expone un token de validación interno de forma encubierta a través de una cabecera de respuesta HTTP 
+                    personalizada (<code>x-interafas-validation</code>).
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> Al igual que en el Reto 11, el equipo de desarrollo o infraestructura 
+                    dejó código de depuración (debug) o de pruebas activo en el ambiente de producción, provocando que 
+                    el servidor inyecte metadatos sensibles directamente en el tráfico HTTP saliente. Existe una falla en 
+                    la validación y limpieza de despliegues (Release Management) y ausencia de controles de saneamiento de 
+                    salida (Output Sanitization) a nivel de servidor web o proxy reverso.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se ingresó al portal de INTERAFAS y se navegó hacia la sección de "Infraestructura".</li>
+                    <li>Se abrieron las herramientas de desarrollo del navegador (F12) posicionándose en la pestaña <em>Network</em> (Red).</li>
+                    <li>Se recargó la página (F5) para capturar todo el tráfico y las peticiones asíncronas generadas por el portal en segundo plano.</li>
+                    <li>Se localizó la petición GET realizada dinámicamente al endpoint: <code>http://localhost:8080/api/infrastructure-status.php</code>.</li>
+                    <li>Se seleccionó dicha petición y se navegó a la sección de <em>Headers</em>, específicamente dentro del bloque de <em>Response Headers</em>.</li>
+                    <li>Se identificó la cabecera no estándar inyectada por el servidor, capturando la bandera correspondiente.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Confidencialidad:</strong> Aunque el impacto directo a datos de usuario es nulo en este endpoint, 
+                    la filtración constante de metadatos de desarrollo facilita la fase de reconocimiento para un atacante. 
+                    Le confirma que la arquitectura permite cabeceras personalizadas y evidencia una falta de madurez en 
+                    los controles de paso a producción.
+                </p>
+                <p>
+                    <strong>Riesgo Organizacional:</strong> Representa una falla en los procedimientos operativos estandarizados. 
+                    Hoy es una bandera de laboratorio, pero mañana esta misma práctica podría exponer un token de autorización 
+                    real de una API interna.
+                </p>
+            </section>
+
+            <section>
+                <h3>Cadena de ataque</h3>
+                <p>
+                    Este hallazgo se clasifica dentro de la recolección de inteligencia (Information Gathering). Al inspeccionar 
+                    las peticiones automáticas de la interfaz de usuario, un atacante identifica endpoints de la API que operan 
+                    en segundo plano. Estos endpoints son candidatos ideales para probar ataques de enumeración (Fuzzing) o 
+                    Inyección (SQLi) debido a que suelen tener menos medidas defensivas que los formularios visibles.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li><strong>Limpieza de Código (Code Review):</strong> Auditar el código fuente del archivo <code>infrastructure-status.php</code> y eliminar las funciones (como <code>header()</code> en PHP) que inyecten estas variables de validación en los ambientes de producción.</li>
+                    <li><strong>Hardening del Servidor / Proxy:</strong> Configurar el servidor web Apache, Nginx o el Web Application Firewall (WAF) para que intercepte las respuestas del backend y elimine sistemáticamente cualquier cabecera que no pertenezca a una lista blanca estricta (permitiendo solo cabeceras estándar de seguridad y contenido).</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-BEHIND-THE-DESK-15</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>

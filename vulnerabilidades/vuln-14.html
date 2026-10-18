@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-14 — Falla Lógica en Validación de Vínculos Contractuales</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-14</h1>
+                <p class="alias">"Falla Lógica en la Validación de Vínculos Contractuales (Inconsistencia Relacional)"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    El sistema certifica incorrectamente la existencia de un vínculo entre un contrato y un proveedor. 
+                    Al suministrar el ID de un contrato real y modificar el ID del proveedor por el de una empresa 
+                    no relacionada, la aplicación devuelve una respuesta de validación exitosa en lugar de rechazar la petición.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> El backend procesa la solicitud evaluando la existencia de las entidades 
+                    de forma aislada (verifica que el <code>contract_id</code> exista en la base de datos y que el 
+                    <code>provider_id</code> corresponda a un proveedor vigente), pero omite realizar la consulta relacional 
+                    (<code>JOIN</code>) que certifique que ese contrato específico fue adjudicado a ese proveedor específico.
+                    Existe una falla severa en la validación de la lógica de negocio y en la integridad de las consultas.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se ingresó al padrón de proveedores en <code>http://localhost:8080/proveedores.php</code> y se navegó a la sección "Contrataciones".</li>
+                    <li>Se ejecutó la función "Validar vínculo" sobre una contratación existente, interceptando la petición HTTP GET.</li>
+                    <li>Se registró la URL original: <code>http://localhost:8080/validar-vinculo-contractual.php?contract_id=51&provider_id=171</code>.</li>
+                    <li>Se consultó el padrón público para obtener el ID de un proveedor diferente (ej. ID 154 correspondiente a "Ambiental del Bajio Ingenieria").</li>
+                    <li>Se modificó la petición alterando únicamente el proveedor: <code>contract_id=51&provider_id=154</code>.</li>
+                    <li>El sistema falló en detectar la inconsistencia, validando positivamente la relación falsa y revelando la bandera.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Integridad y No Repudio (Nivel Crítico):</strong> La aplicación emite comprobantes oficiales o 
+                    pantallas de validación para relaciones contractuales ficticias. Un tercero puede usar esta plataforma 
+                    para demostrar falsamente a bancos o autoridades que tiene un contrato adjudicado con INTERAFAS.
+                </p>
+                <p>
+                    <strong>Riesgo Legal y Reputacional:</strong> Habilita escenarios de fraude corporativo, corrupción 
+                    y suplantación. Si un ente auditor descubre que el sistema valida contratos falsos, la reputación de 
+                    la infraestructura crítica quedará totalmente destruida.
+                </p>
+            </section>
+
+            <section>
+                <h3>Cadena de ataque</h3>
+                <p>
+                    Esta vulnerabilidad funciona como un vector facilitador para ataques de ingeniería social e infiltración 
+                    en la cadena de suministro. Un atacante que ha logrado obtener el ID de un contrato interno mediante 
+                    un IDOR previo (VULN-03) puede usar esta falla lógica para generar pruebas falsas de adjudicación, 
+                    presentándolas a los empleados de INTERAFAS para exigir pagos, accesos o información confidencial.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li><strong>Corrección de Consultas Relacionales:</strong> Modificar el código fuente en <code>validar-vinculo-contractual.php</code> para que la consulta SQL utilice cláusulas de relación estricta (<code>JOIN</code> o <code>WHERE</code>) que exijan la coincidencia de ambas claves foráneas. Ejemplo: <code>SELECT * FROM contratos WHERE id = ? AND id_proveedor = ?</code>.</li>
+                    <li><strong>Pruebas de Casos Negativos (Unit Testing):</strong> Integrar pruebas automatizadas que envíen combinaciones de identificadores no correspondientes, asegurando que el backend responda con "Vínculo no localizado" o un error HTTP 400.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-TRUSTED-SUPPLIER-14</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>

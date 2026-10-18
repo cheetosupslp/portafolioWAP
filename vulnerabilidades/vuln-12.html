@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-12 — Referencia Directa Insegura a Objetos (IDOR) en módulo de pagos</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-12</h1>
+                <p class="alias">"Referencia Directa Insegura a Objetos (IDOR / BOLA) en módulo de facturación"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    El portal permite a los ciudadanos consultar sus recibos y estados de cuenta a través de un 
+                    identificador numérico secuencial en la URL o API. Sin embargo, se detectó que es posible 
+                    acceder a los documentos financieros de cualquier otro ciudadano simplemente modificando 
+                    dicho identificador.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> Ausencia de autorización a nivel de objeto (Broken Object Level Authorization - BOLA). 
+                    El backend valida que el usuario tenga una sesión activa, pero falla de manera crítica al 
+                    no verificar si el registro específico solicitado en la base de datos pertenece legítimamente 
+                    al propietario de dicha sesión.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se inició sesión legítimamente con una cuenta de ciudadano estándar.</li>
+                    <li>Se accedió a la visualización de una factura propia, observando que la URL dependía de un parámetro directo (ej. <code>ver_factura.php?id=1045</code>).</li>
+                    <li>Se modificó el parámetro numérico de forma incremental u horizontal (ej. <code>id=1046</code> o <code>id=1047</code>).</li>
+                    <li>El servidor omitió la validación de propiedad y devolvió el recibo, datos personales y montos de cobro de un tercer usuario sin autorización.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Nivel Alto.</strong> Esta vulnerabilidad representa una violación directa a la privacidad 
+                    y confidencialidad de la Información de Identificación Personal (PII) e información financiera. 
+                    Un atacante puede crear un script automatizado para descargar y enumerar masivamente todos los recibos 
+                    de los ciudadanos iterando sobre los identificadores (Data Scraping).
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li>Implementar controles estrictos de autorización a nivel de objeto en el backend: cada consulta SQL para visualizar o modificar registros debe incluir una validación contra el ID del usuario autenticado (ej. <code>SELECT * FROM facturas WHERE id_factura = ? AND id_usuario_sesion = ?</code>).</li>
+                    <li>Sustituir los identificadores enteros autoincrementales (como 1045) por identificadores únicos universales e impredecibles (UUIDv4) para evitar la enumeración de registros.</li>
+                    <li>Asegurar mediante pruebas de caja blanca que el modelo de control de acceso se aplique de manera transversal en todos los endpoints de consulta y modificación.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-SECOND-ACCOUNT-12</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>

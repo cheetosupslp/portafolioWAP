@@ -1,0 +1,93 @@
+Aquí tienes el código HTML para la **VULN-13**, integrando exactamente los detalles técnicos que documentaste sobre la falla en la lógica de negocio de `pago.php` y la bandera específica que capturaste.
+
+Mantiene el mismo diseño premium de tu portafolio:
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-13 — Manipulación de flujo lógico de pago (Client-side bypass)</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-13</h1>
+                <p class="alias">"Evasión de controles del lado del cliente y alteración de lógica de facturación"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    Se descubrió una vulnerabilidad crítica en la lógica de negocio del módulo de pagos (<code>pago.php</code>). 
+                    El sistema permite a un usuario alterar el monto de cobro antes de enviarlo al procesador final, 
+                    eludiendo las restricciones de interfaz que simulaban proteger la tarifa original.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> Violación del principio fundamental de seguridad "Nunca confíes en el cliente" (Zero Trust). 
+                    El backend depende de controles superficiales en el HTML (el atributo <code>readonly</code> o campos ocultos) 
+                    para mantener la integridad del precio. Al recibir el formulario (POST), el servidor no recalcula ni 
+                    valida criptográficamente el monto contra la base de datos interna, aceptando ciegamente la cantidad manipulada.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se inició un proceso de pago legítimo dentro de la plataforma, llegando al formulario de confirmación en <code>pago.php</code>.</li>
+                    <li>Se identificó el campo de texto que mostraba el total a pagar, el cual estaba bloqueado visualmente por el atributo HTML <code>readonly</code>.</li>
+                    <li>Utilizando las herramientas de desarrollador del navegador (Inspect Element), se eliminó el atributo <code>readonly</code> del código fuente local.</li>
+                    <li>Se modificó el valor numérico original por una cantidad inferior (ej. de $1,500.00 a $1.00).</li>
+                    <li>Al enviar el formulario modificado, el backend procesó el pago de manera exitosa tomando como válido el monto alterado.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Nivel Crítico.</strong> Representa un vector directo para el fraude financiero sistémico. 
+                    Cualquier ciudadano con conocimientos básicos de navegación web puede evadir el costo real 
+                    de los servicios, multas o impuestos, traduciéndose en pérdidas económicas directas y masivas 
+                    para la institución (evaluado formalmente en las matrices de riesgo R-21 a R-23).
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li>El monto a pagar jamás debe ser enviado o leído desde el cliente hacia el servidor durante el procesamiento del pago.</li>
+                    <li>El backend debe recalcular de forma independiente la tarifa final consultando el ID del servicio o producto directamente en la base de datos de precios interna.</li>
+                    <li>Si los flujos de terceros requieren enviar montos en el frontend temporalmente, se deben asegurar utilizando firmas criptográficas (HMAC) vinculadas a la sesión del usuario.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-PAYMENT-PATH-13</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>
+
+```
+
+Ya dejé insertada tu bandera (`UPSLP_CNOIV-PAYMENT-PATH-13`). ¿Nos pasamos a la 14?

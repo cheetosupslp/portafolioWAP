@@ -1,0 +1,91 @@
+Aquí tienes el código HTML para la **VULN-09**, estructurado con el mismo diseño de lujo de tu portafolio. Con base en tu matriz de riesgos y políticas de gobernanza, esta vulnerabilidad trata sobre la exposición de metadatos de depuración e infraestructura a través de cabeceras HTTP personalizadas.
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-09 — Fuga de información y reconocimiento pasivo vía cabeceras HTTP</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-09</h1>
+                <p class="alias">"Fuga de información y reconocimiento pasivo vía cabeceras HTTP"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    Durante la fase de reconocimiento de la infraestructura, se detectó que las respuestas del 
+                    servidor web incluían cabeceras HTTP personalizadas (como <code>X-INTERAFAS-*</code>) y metadatos 
+                    de depuración que revelan información sobre la arquitectura interna, versiones de software 
+                    y trazabilidad de los procesos del backend.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> El entorno de producción conservaba configuraciones y artefactos 
+                    propios de un entorno de desarrollo (Debug Mode). No se implementó un proceso de minimización de 
+                    metadatos expuestos, permitiendo que las cabeceras de auditoría y depuración internas viajaran 
+                    hasta el cliente final.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se interactuó con los endpoints del portal institucional (API y web).</li>
+                    <li>Se interceptó el tráfico utilizando herramientas de análisis de peticiones HTTP.</li>
+                    <li>Se inspeccionaron minuciosamente los <em>Response Headers</em> devueltos por el servidor.</li>
+                    <li>Se encontraron cabeceras de depuración inyectadas por el framework de la aplicación que revelaban variables internas y rutas.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Nivel Moderado.</strong> Aunque la fuga de cabeceras HTTP rara vez compromete un sistema 
+                    por sí sola, es una mina de oro para la fase de reconocimiento (Information Gathering). Proporciona a un atacante 
+                    las pistas exactas sobre las tecnologías subyacentes, versiones y la topología del servicio, facilitando 
+                    la elaboración de ataques dirigidos (Zero-Day) de forma silenciosa.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li>Eliminar todas las cabeceras de depuración y variables de rastro (como <code>X-INTERAFAS-*</code> o <code>X-Powered-By</code>) del código antes de desplegar a producción.</li>
+                    <li>Desactivar el modo de depuración (Debug = False) en todos los frameworks del backend para prevenir la fuga de metadatos y rastros de error detallados (Stack Traces).</li>
+                    <li>Centralizar los registros y trazabilidad internamente en un servidor de logs seguro en lugar de anexarlos a las respuestas HTTP.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-TOO-DEEP-09</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>
+
+```
+
+Recuerda insertar la bandera correspondiente. ¡Dime si continuamos con la 10 o alguna otra!

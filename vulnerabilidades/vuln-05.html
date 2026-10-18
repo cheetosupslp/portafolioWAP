@@ -1,0 +1,83 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-05 — Secuestro de sesión por gestión insegura de cookies</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-05</h1>
+                <p class="alias">"Secuestro de sesión por gestión insegura de cookies"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    Durante las pruebas de autenticación, se determinó que el portal de INTERAFAS manejaba los 
+                    identificadores de sesión (PHPSESSID) de forma insegura, permitiendo que una sesión activa 
+                    pudiera ser secuestrada o reutilizada por un actor malintencionado tras interceptar el tráfico o acceder a la cookie.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> Carencia de controles de seguridad en las cookies (ausencia de banderas <code>HttpOnly</code> y <code>Secure</code>) 
+                    y falta de invalidación o regeneración del identificador de sesión en cambios de estado de privilegio o cierres de sesión.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se inició sesión legítimamente en el portal institucional.</li>
+                    <li>Se extrajo el valor de la cookie de sesión (PHPSESSID) utilizando las herramientas de desarrollador del navegador.</li>
+                    <li>Se configuró esta misma cookie en un navegador diferente y desde una dirección IP distinta.</li>
+                    <li>Se logró acceder al portal con la sesión de la víctima completamente activa, sin requerir credenciales adicionales.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Nivel Alto.</strong> El secuestro de sesión permite a un atacante suplantar la identidad de un ciudadano 
+                    o de un administrador sin necesidad de conocer su contraseña[cite: 23]. Esto compromete la confidencialidad de la información 
+                    personal e invalida los controles de acceso basados en identidad.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li>Configurar las cookies de sesión con las banderas <code>HttpOnly</code> (para evitar el acceso vía JavaScript) y <code>Secure</code> (para forzar la transmisión solo por HTTPS).</li>
+                    <li>Implementar la regeneración del identificador de sesión (<code>session_regenerate_id()</code> en PHP) inmediatamente después de un inicio de sesión exitoso o un cambio de privilegios[cite: 20].</li>
+                    <li>Implementar tiempos de expiración (timeouts) absolutos y por inactividad para invalidar sesiones antiguas desde el lado del servidor.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-TOO-MUCH-INFO-05</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>
+
+```

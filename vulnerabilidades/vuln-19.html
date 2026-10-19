@@ -1,0 +1,103 @@
+Aquí tienes el código HTML para la **VULN-19**, maquetado con el diseño premium de tu portafolio y respetando detalladamente tu documentación sobre la **Exposición de Topología OT y Exceso de Privilegios**.
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-19 — Exposición de Topología OT y Exceso de Privilegios</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-19</h1>
+                <p class="alias">"Exposición de Topología OT y Exceso de Privilegios (Dependency Chain Exposure)"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    El sistema de operaciones expone el modelo completo de dependencias de la infraestructura física 
+                    (desde comunicaciones hasta distribución en zonas de servicio).
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> El backend permite que una sesión con rol de mantenimiento (<code>maintenance</code>) 
+                    consulte la cadena completa hasta el activo terminal, violando el Principio de Mínimo Privilegio 
+                    (<code>Authorization-Scope: exceeded</code>) y exponiendo tokens de validación internos en las cabeceras HTTP. 
+                    Existe una falla crítica en el Control de Acceso Basado en Roles (RBAC). El sistema confía en un rol de 
+                    nivel operativo bajo para consultar datos de topología de alto nivel que deberían ser exclusivos para 
+                    perfiles de arquitectura o ingeniería.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se accedió al panel de operaciones (<code>/operations/</code>) con la sesión activa de mantenimiento.</li>
+                    <li>Se navegó a la sección de activos y se siguió la cadena de dependencias de forma secuencial: <code>RTU-GW-07 &rarr; PLC-SL-01 &rarr; P-SL-101 &rarr; HDR-SL-01 &rarr; V-SL-201 &rarr; ZONE-SL-A</code>.</li>
+                    <li>Se confirmó que el indicador cambia a <code>ЗАВЕРШЕНО · 6/6</code> al completar la secuencia.</li>
+                    <li>Se consultó directamente el endpoint final mediante una petición GET a <code>/operations/asset-context.php?asset=ZONE-SL-A</code>.</li>
+                    <li>Se inspeccionaron los Response Headers para localizar la fuga de información y el token: <code>X-INTERAFAS-Authorization-Scope: exceeded</code>, <code>X-INTERAFAS-Dependency-Chain: complete</code> y la bandera correspondiente.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Reconocimiento Crítico (Nivel Alto):</strong> Proporciona a un atacante el "mapa del tesoro" 
+                    exacto de la red industrial. Al conocer la cadena de dependencias, un actor malicioso sabe exactamente 
+                    qué controlador o válvula debe comprometer para cortar el suministro de una zona de servicio específica.
+                </p>
+                <p>
+                    <strong>Facilitación de Sabotaje:</strong> Permite enfocar ataques disruptivos en el punto exacto 
+                    de la infraestructura que causará el mayor impacto, reduciendo el tiempo y esfuerzo del atacante.
+                </p>
+            </section>
+
+            <section>
+                <h3>Cadena de ataque (ICS Kill Chain)</h3>
+                <p>
+                    Esta vulnerabilidad representa la fase de Reconocimiento Interno Avanzado dentro del modelo ICS Kill Chain. 
+                    Tras evadir el perímetro de red y autenticarse en el panel OT, el atacante utiliza esta fuga de información 
+                    para mapear las dependencias físicas de la planta y elegir su objetivo de sabotaje con precisión quirúrgica.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li><strong>Control de Acceso Estricto (RBAC/ABAC):</strong> Limitar la visibilidad de la topología de red y el contexto de los activos según el nivel del usuario. Los roles de mantenimiento solo deben tener visibilidad del nodo específico asignado, no de toda la cadena de distribución.</li>
+                    <li><strong>Depuración de Cabeceras HTTP:</strong> Eliminar la exposición de metadatos de depuración o de lógica de negocio (las cabeceras <code>X-INTERAFAS-*</code>) en las respuestas de los servidores en entornos de producción.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-CHAIN-REACTION-19</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>
+
+```
+
+Con la 19 finalizada, solo nos falta la **VULN-20** (el sabotaje del gemelo digital y la alteración del `pressure_setpoint_bar`) para completar toda la colección de tu entrega. ¡Mándame los detalles y cerramos el portafolio con broche de oro!

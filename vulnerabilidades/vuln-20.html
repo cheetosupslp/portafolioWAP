@@ -1,0 +1,104 @@
+Aquí tienes el código HTML para la **VULN-20**, el clímax de tu fase de impacto y sabotaje. Esta página cierra la galería de hallazgos estructurando perfectamente la desestabilización del gemelo digital.
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-20 — Alteración de Parámetros Operativos por Falta de Validación</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-20</h1>
+                <p class="alias">"Alteración de Parámetros Operativos por Falta de Validación de Límites (Sanity Checks)"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    El módulo de actualización de firmware acepta archivos de configuración que alteran los parámetros 
+                    físicos del gemelo digital, causando un estado de desestabilización en cascada (<code>CATASTROPHIC STATE</code>).
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> El sistema procesa y aplica la carga del archivo JSON en el endpoint 
+                    <code>/operations/firmware.php</code> sin validar si las variables operativas (como el <code>pressure_setpoint_bar</code>) 
+                    se mantienen dentro de un rango físico seguro predefinido. Existe una ausencia total de validación 
+                    de entrada estructurada y falta de límites operativos (Sanity Checks) a nivel del servidor de control 
+                    industrial, asumiendo erróneamente que cualquier archivo con la estructura JSON correcta es seguro de aplicar.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se accedió a la sección de Firmware (<code>/operations/firmware.php</code>) habilitada tras completar el reconocimiento de la cadena de dependencias.</li>
+                    <li>Se descargó el archivo de backup original del dispositivo <code>RTU-GW-07</code>.</li>
+                    <li>Se inspeccionó el contenido del archivo JSON, identificando el valor base de operación: <code>"pressure_setpoint_bar": 4.2</code>.</li>
+                    <li>Se modificó localmente el archivo JSON, alterando únicamente el parámetro operativo para exceder los límites físicos (cambiando 4.2 a 10).</li>
+                    <li>Se cargó el archivo JSON modificado a través del formulario de actualización del HMI.</li>
+                    <li>Se observó en el panel la propagación de la falla: aumento de presión, incremento de alarmas y caída de disponibilidad hasta alcanzar el estado crítico, capturando la bandera en el encabezado.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Sabotaje Industrial (Nivel Crítico):</strong> Alterar los setpoints de presión o temperatura 
+                    sin mecanismos de resguardo lógicos induce a las máquinas a operar fuera de sus límites de diseño, 
+                    provocando estrés en los materiales, fallas en cascada y potencial destrucción de equipos costosos 
+                    e irremplazables (bombas, válvulas, tuberías).
+                </p>
+                <p>
+                    <strong>Interrupción de Infraestructura Crítica:</strong> La degradación y pérdida de disponibilidad 
+                    inmediata del gemelo digital simula un escenario de impacto real donde el suministro de agua a una 
+                    ciudad se detendría por completo.
+                </p>
+            </section>
+
+            <section>
+                <h3>Cadena de ataque</h3>
+                <p>
+                    Este hallazgo es el clímax de la fase de Impacto Físico y Sabotaje. Tras haber comprometido el 
+                    sistema de actualizaciones (VULN-18) y obtenido la topología de red (VULN-19), el atacante ejecuta 
+                    la acción final sobre los objetivos alterando los parámetros operativos a niveles críticos para 
+                    destruir la disponibilidad de los servicios de INTERAFAS.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li><strong>Validación Estricta de Límites (Sanity Checks):</strong> Implementar listas blancas (whitelists) en el backend para validar que todas las variables físicas se encuentren dentro de un rango operativo seguro (ej. <code>0.0 &lt; pressure_setpoint_bar &lt; 5.0</code>) antes de confirmar la actualización.</li>
+                    <li><strong>Firma y Autenticación de Configuraciones:</strong> Combinar la validación de límites con firmas criptográficas (como se describió en la VULN-18) para garantizar que los parámetros no puedan ser alterados offline por personal no autorizado.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-NOW-YOU-CONTROL-20</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>
+
+```

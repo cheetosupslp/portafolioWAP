@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-18 — Criptografía Insegura y Falsificación de Firmware en Equipos OT</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-18</h1>
+                <p class="alias">"Criptografía Insegura y Falsificación de Firmware en Equipos OT (Insecure Firmware Update)"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    El mecanismo de actualización de firmware para los equipos terminales remotos (RTU) presenta dos fallas críticas: 
+                    expone la contraseña de la cuenta de mantenimiento en un formato de hash obsoleto (SHA-1) dentro del manifiesto público, 
+                    y permite la instalación de paquetes de código alterados.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> El servidor de actualizaciones (<code>install.php</code>) verifica únicamente la 
+                    integridad del archivo mediante un checksum SHA-256 que acompaña al paquete, pero omite por completo verificar 
+                    la autenticidad del emisor (no exige una firma digital o certificado PKI). Además, la contraseña del perfil de 
+                    mantenimiento era predecible, basada en el contexto de la versión y protegida con un algoritmo criptográfico 
+                    deprecado (SHA-1). Existe una falla crítica en la Gestión de Actualizaciones Seguras (Code Signing) y en las 
+                    Prácticas Criptográficas.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Se inspeccionó el cliente JS de operaciones (<code>ops-client.php</code>) para descubrir los endpoints de gestión: <code>/operations/firmware-status.php</code> y <code>/operations/updates/manifest.php</code>.</li>
+                    <li>Se obtuvo el manifiesto de actualización, el cual reveló la cuenta de soporte (<code>soporte.ot@interafas.local</code>) y su hash de validación SHA-1 (<code>6500c2c7de15391e46f0fb090f198867b902a2c1</code>).</li>
+                    <li>Se ejecutó un ataque de diccionario/deducción offline, logrando quebrar el hash SHA-1 para obtener la contraseña en texto claro: <strong>Soporte343</strong>.</li>
+                    <li>Se utilizó PowerShell inyectando la cabecera de origen falsificada (<code>X-Forwarded-For: 10.40.20.10</code>) y la cabecera de autorización básica (<code>Authorization: Basic [Base64]</code>) para descargar el paquete original desde <code>package.php</code>.</li>
+                    <li>Se modificó el payload JSON del firmware para insertar comandos de diagnóstico no autorizados (ej. <code>{"mode":"NORMAL","diagnostic":"UNLOCKED"}</code>).</li>
+                    <li>Se calculó localmente el nuevo hash SHA-256 del payload modificado.</li>
+                    <li>Se envió una petición HTTP POST a <code>install.php</code> adjuntando el payload alterado y el nuevo SHA-256 calculado.</li>
+                    <li>El servidor aceptó la instalación devolviendo la confirmación de integridad superada (<code>integrity: passed</code>) y evidenciando que la validación de firma fue omitida (<code>authenticity: not-verified</code>).</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Integridad Física y Operativa (Nivel Crítico):</strong> Cargar un firmware malicioso en una 
+                    Unidad Terminal Remota (RTU) o un Controlador Lógico Programable (PLC) permite a un atacante ignorar 
+                    los límites de seguridad física. Puede ordenar a las bombas que operen en vacío o cerrar válvulas para 
+                    generar sobrepresión y causar la destrucción del hardware, interrumpiendo el suministro de agua a la ciudad.
+                </p>
+                <p>
+                    <strong>Persistencia (APT):</strong> Un firmware comprometido sobrevive a los reinicios del sistema, 
+                    permitiendo al atacante mantener el control de la red OT incluso si se cambian las contraseñas o se 
+                    parchean los servidores web.
+                </p>
+            </section>
+
+            <section>
+                <h3>Cadena de ataque (ICS Kill Chain)</h3>
+                <p>
+                    Este es el escenario de compromiso total en un entorno industrial (fase de Impacto en el modelo ICS Kill Chain). 
+                    Inició con el descubrimiento de un subdominio expuesto, pasó por la evasión del perímetro de red falsificando 
+                    la IP (VULN-16), se obtuvo inteligencia pasiva de la planta (VULN-17) y culminó en la capacidad de alterar la 
+                    lógica de bajo nivel del hardware de control de INTERAFAS (VULN-18), materializando un riesgo catastrófico de 
+                    ciberseguridad física.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li><strong>Firma Digital de Código (Code Signing):</strong> Sustituir la validación de checksum (SHA-256) por una validación de Firma Criptográfica Asimétrica (RSA o ECDSA). El equipo físico solo debe aceptar firmware que haya sido firmado criptográficamente con la llave privada secreta del fabricante o ingeniería.</li>
+                    <li><strong>Eliminación de Hashes en Manifiestos:</strong> Retirar las huellas criptográficas de contraseñas de los archivos de manifiesto descargables por cualquier cliente de red.</li>
+                    <li><strong>Políticas de Contraseñas Robustas:</strong> Prohibir el uso de contraseñas predecibles (que incluyan nombres de departamentos o versiones) y transicionar de Autorización Básica a un sistema de tokens robusto.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-TRUST-THE-PACKAGE-18</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>

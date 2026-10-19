@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VULN-17 — Control de Acceso Inconsistente y Exposición de Telemetría (API OT)</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>VULN-17</h1>
+                <p class="alias">"Control de Acceso Inconsistente y Exposición de Telemetría (Broken Access Control en API OT)"</p>
+                <p class="institution">
+                    <a href="../parcial2/pr02.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al proyecto PR02</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+            
+            <section>
+                <h3>Descripción técnica y causa raíz</h3>
+                <p>
+                    El servicio que suministra los datos en tiempo real de la planta (<code>/operations/telemetry.php</code>) 
+                    expone las variables de proceso industrial sin requerir que el usuario esté autenticado en el Centro de Operaciones.
+                </p>
+                <p>
+                    <strong>Causa raíz:</strong> Existe una asimetría en los controles de seguridad. Mientras que el panel 
+                    principal de operaciones exige tanto estar en la red correcta como tener una sesión de usuario válida, 
+                    el endpoint secundario que alimenta el panel (la API de telemetría) fue programado para confiar 
+                    exclusivamente en la procedencia de la red (<code>network-only</code>), omitiendo la verificación del 
+                    estado de la sesión (<code>Operational-Session: missing</code>). Esto representa una falla crítica en 
+                    el Diseño de Autorización y ausencia de Defensa en Profundidad (Zero Trust). Los desarrolladores 
+                    asumieron erróneamente que cualquier petición proveniente de la red operacional está inherentemente 
+                    autorizada para consumir recursos.
+                </p>
+            </section>
+
+            <section>
+                <h3>Comprobación de los hallazgos</h3>
+                <ol>
+                    <li>Continuando con la falsificación de IP del Reto 16 (<code>X-Forwarded-For: 10.40.20.10</code>), se accedió al portal <code>/operations/login.php</code>.</li>
+                    <li>Se inspeccionó el código fuente HTML de la página e identificó el archivo JavaScript responsable de la lógica del HMI: <code>&lt;script src="/operations/assets/ops-client.php" defer&gt;&lt;/script&gt;</code>.</li>
+                    <li>Se solicitó dicho archivo mediante PowerShell (inyectando la cabecera de proxy) para analizar su contenido y descubrir la ruta del endpoint de datos: <code>telemetryEndpoint: /operations/telemetry.php</code>.</li>
+                    <li>Se realizó una petición GET directa hacia <code>/operations/telemetry.php</code> utilizando PowerShell sin enviar cookies ni credenciales, únicamente la cabecera de origen falsificado.</li>
+                    <li>El servidor devolvió un HTTP 200 OK, entregando los datos telemétricos de la planta.</li>
+                    <li>Al inspeccionar las cabeceras de respuesta, se confirmó la falla lógica mediante los valores <code>Monitoring-Authorization: network-only</code> y <code>Operational-Session: missing</code>, extrayendo la bandera del reto.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h3>Impacto y riesgo</h3>
+                <p>
+                    <strong>Confidencialidad Operativa (Nivel Crítico):</strong> Aunque el atacante no puede modificar valores 
+                    (todavía), obtiene "ojos sobre la planta". Puede monitorizar en tiempo real las temperaturas, niveles, 
+                    caudales y presiones del sistema hídrico.
+                </p>
+                <p>
+                    <strong>Riesgo Operativo (Inteligencia para Sabotaje):</strong> Conocer el estado exacto de las variables 
+                    de proceso es el requisito indispensable para planificar un ataque físico exitoso. Un atacante necesita 
+                    saber cuándo un tanque está lleno o una válvula está bajo presión para que su comando de sabotaje cause 
+                    el máximo daño físico (cavitación, derrames, explosiones).
+                </p>
+            </section>
+
+            <section>
+                <h3>Cadena de ataque (Kill Chain ICS/SCADA)</h3>
+                <p>
+                    Este hallazgo enlaza perfectamente con la vulnerabilidad anterior. En la VULN-16 se logró "conectar el cable" 
+                    a la red operacional mediante Spoofing. En esta VULN-17, se exploró pasivamente esa red, descubriendo y 
+                    explotando una API mal configurada que brinda visibilidad total de la planta sin necesidad de robar contraseñas. 
+                    El siguiente paso lógico en la cadena es pasar de la monitorización pasiva a la manipulación activa de los 
+                    actuadores, válvulas o sistemas de mantenimiento.
+                </p>
+            </section>
+
+            <section>
+                <h3>Mitigaciones</h3>
+                <ul>
+                    <li><strong>Verificación de Sesión Obligatoria (Middleware):</strong> Implementar un componente centralizado que intercepte el 100% de las peticiones hacia el directorio <code>/operations/</code> (incluyendo APIs y assets dinámicos) y valide criptográficamente la existencia de un token de sesión activo antes de procesar la solicitud.</li>
+                    <li><strong>Enfoque de Confianza Cero (Zero Trust):</strong> Abandonar el modelo de seguridad basado en el perímetro. La dirección IP (incluso si proviene de un segmento OT validado por un firewall) nunca debe ser el único factor para autorizar el acceso a datos industriales.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bandera</h3>
+                <p><code>UPSLP_CNOIV-EYES-ON-THE-PLANT-17</code></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+        </footer>
+    </div>
+</body>
+</html>

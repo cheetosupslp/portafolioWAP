@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 17 - La Memoria del Crimen | Seguridad Informática</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos para el visor de la documentación (imágenes de la práctica) */
+        .evidence-viewer {
+            width: 100%;
+            max-height: 720px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f8f9fa;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.06);
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 15px;
+        }
+        .evidence-viewer img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .evidence-viewer::-webkit-scrollbar {
+            width: 10px;
+        }
+        .evidence-viewer::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 5px;
+        }
+        .evidence-viewer::-webkit-scrollbar-thumb {
+            background: var(--accent-dark, #5a3e2b);
+            border-radius: 5px;
+        }
+        .evidence-viewer::-webkit-scrollbar-thumb:hover {
+            background: #3d2a1c;
+        }
+        .viewer-hint {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 8px;
+            font-style: italic;
+            text-align: center;
+        }
+        .code-block {
+            background-color: #2b2b2b;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>Actividad 17</h1>
+                <p class="alias">"La Memoria del Crimen: Análisis Forense Volátil"</p>
+                <h2>Parcial 2 – Seguridad Informática</h2>
+                <p class="institution">
+                    <a href="index.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al Listado del Parcial 2</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+
+            <!-- SECCIÓN DE DESCARGA DEL INFORME -->
+            <section class="evidence-card" style="text-align: center; border-left: 4px solid var(--accent-dark);">
+                <div class="card-number">DOCX</div>
+                <h3>Informe de Actividad Completado</h3>
+                <p>
+                    Descarga el documento formal de la Actividad 17, el cual detalla el análisis del volcado 
+                    de memoria RAM, la extracción de credenciales, procesos maliciosos e identificadores de red.
+                </p>
+                
+                <a href="AroniaSilvaLuisEmmanuel-Act17.pdf" download class="btn-luxury" style="display: inline-block; text-decoration: none; margin-top: 15px;">
+                    Descargar Informe DOCX 📄
+                </a>
+            </section>
+
+            <!-- OBJETIVO -->
+            <section class="evidence-card">
+                <div class="card-number">01</div>
+                <h3>Objetivo de la Actividad</h3>
+                <p>
+                    Realizar un análisis forense de memoria volátil sobre una muestra (OtterCTF.vmem) de un presunto cibercriminal utilizando el framework <strong>Volatility</strong>. El objetivo principal es extraer evidencia crítica para la investigación, incluyendo la fecha del volcado, sistema operativo, credenciales de usuario en texto claro, actividad de red, procesos maliciosos vinculados a troyanos, servidores de Comando y Control (C2), y carteras de criptomonedas involucradas en actividades ilícitas.
+                </p>
+            </section>
+
+            <!-- DESARROLLO -->
+            <section class="evidence-card">
+                <div class="card-number">02</div>
+                <h3>Desarrollo Técnico</h3>
+                <p>
+                    El análisis se llevó a cabo en un entorno Kali Linux. Debido a problemas de compatibilidad de ciertos plugins en Volatility 3, se procedió a la instalación y configuración manual de <strong>Volatility 2</strong> utilizando <code>python2</code>. Durante la investigación se ejecutaron diversos comandos clave:
+                </p>
+                <ul>
+                    <li><strong>Perfilado del sistema:</strong> Identificación de la imagen como Windows 7 SP1 x64 (<code>imageinfo</code>).</li>
+                    <li><strong>Extracción de credenciales:</strong> Obtención de los hashes NTLM (<code>hashdump</code>) revelando la contraseña del usuario Rick.</li>
+                    <li><strong>Análisis de red y registro:</strong> Descubrimiento de la IP local (<code>netscan</code>), nombre del equipo WIN-LO6FAF3DTFE (<code>hivelist</code>, <code>printkey</code>).</li>
+                    <li><strong>Identificación de Malware:</strong> Rastreo de procesos sospechosos (<code>pstree</code>) identificando <code>vmware-tray.exe</code> como proceso malicioso principal y <code>LunarMS.exe</code> conectándose a un servidor C2 en el Reino Unido.</li>
+                    <li><strong>Extracción de artefactos:</strong> Recuperación de correos, contraseñas del portapapeles y una dirección de cartera Bitcoin ofuscada en formato Unicode (<code>procdump</code>, <code>strings</code>).</li>
+                </ul>
+            </section>
+
+            <!-- VISOR DE EVIDENCIAS -->
+            <section class="evidence-card">
+                <div class="card-number">03</div>
+                <h3>Evidencia Visual – Análisis en Terminal</h3>
+                <p>
+                    A continuación se muestran algunas de las capturas del procedimiento de análisis forense realizado en la terminal de Kali Linux.
+                </p>
+                
+                <div class="evidence-viewer">
+                    <!-- SUGERENCIA: Reemplaza estas rutas con las imágenes reales de tu práctica -->
+                    <img src="img/volatility_install.png" alt="Instalación de Volatility 2">
+                    <img src="img/imageinfo.png" alt="Comando imageinfo">
+                    <img src="img/hashdump.png" alt="Extracción de hashes">
+                    <img src="img/netscan.png" alt="Análisis de conexiones de red">
+                    <img src="img/pstree.png" alt="Árbol de procesos">
+                </div>
+                <p class="viewer-hint">↓ Desliza hacia abajo para ver todas las capturas ↓</p>
+            </section>
+
+            <!-- CONCLUSIONES -->
+            <section class="evidence-card">
+                <div class="card-number">04</div>
+                <h3>Conclusiones</h3>
+                <p>
+                    El análisis forense de la memoria volátil demostró ser una técnica invaluable para la recolección de inteligencia y evidencias. A través de Volatility, fue posible reconstruir el escenario del compromiso, confirmando el uso de ingeniería social para la infección inicial. 
+                </p>
+                <p>
+                    La identificación del proceso <code>vmware-tray.exe</code> como vector de ataque y la extracción exitosa de la cartera de criptomonedas ofuscada validan las hipótesis de investigación, proporcionando a las autoridades los indicadores de compromiso (IoCs) necesarios para rastrear las operaciones del cibercriminal y desarticular su infraestructura.
+                </p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <!-- Actualizado al Parcial 2 como mencionaste -->
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2 - Portafolio de Evidencias.</p>
+        </footer>
+    </div>
+</body>
+</html>

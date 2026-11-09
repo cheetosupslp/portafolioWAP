@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 16 - La verdad en los bits | Seguridad Informática</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos para el visor de la documentación (imágenes de la práctica) */
+        .evidence-viewer {
+            width: 100%;
+            max-height: 720px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f8f9fa;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.06);
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 15px;
+        }
+        .evidence-viewer img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .evidence-viewer::-webkit-scrollbar {
+            width: 10px;
+        }
+        .evidence-viewer::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 5px;
+        }
+        .evidence-viewer::-webkit-scrollbar-thumb {
+            background: var(--accent-dark, #5a3e2b);
+            border-radius: 5px;
+        }
+        .evidence-viewer::-webkit-scrollbar-thumb:hover {
+            background: #3d2a1c;
+        }
+        .viewer-hint {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 8px;
+            font-style: italic;
+            text-align: center;
+        }
+        .code-block {
+            background-color: #2b2b2b;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>Actividad 16</h1>
+                <p class="alias">"La verdad en los bits: adquisición forense con FTK Imager"</p>
+                <h2>Parcial 2 – Seguridad Informática</h2>
+                <p class="institution">
+                    <a href="index.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al Listado del Parcial 2</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+
+            <!-- SECCIÓN DE DESCARGA DEL INFORME -->
+            <section class="evidence-card" style="text-align: center; border-left: 4px solid var(--accent-dark);">
+                <div class="card-number">DOCX</div>
+                <h3>Informe de Actividad Completado</h3>
+                <p>
+                    Descarga el documento formal de la Actividad 16, el cual detalla el proceso de 
+                    adquisición de una imagen forense bit a bit utilizando FTK Imager.
+                </p>
+                
+                <a href="Act16_Completado.docx" download class="btn-luxury" style="display: inline-block; text-decoration: none; margin-top: 15px;">
+                    Descargar Informe DOCX 📄
+                </a>
+            </section>
+
+            <!-- OBJETIVO -->
+            <section class="evidence-card">
+                <div class="card-number">01</div>
+                <h3>Objetivo de la Actividad</h3>
+                <p>
+                    Realizar la adquisición de material digital (una memoria USB) mediante la creación de una copia forense bit a bit utilizando la herramienta <strong>FTK Imager</strong>. El objetivo principal es preservar la evidencia en su estado original, asegurando su integridad mediante el cálculo y verificación de hashes (MD5 y SHA-1) para su posterior análisis en un marco legal.
+                </p>
+            </section>
+
+            <!-- DESARROLLO -->
+            <section class="evidence-card">
+                <div class="card-number">02</div>
+                <h3>Desarrollo Técnico</h3>
+                <p>
+                    El proceso de adquisición se llevó a cabo en un entorno Windows, siguiendo las metodologías estandarizadas de análisis forense digital:
+                </p>
+                <ul>
+                    <li><strong>Configuración del origen:</strong> Selección de la memoria USB como disco físico (<em>Physical Drive</em>).</li>
+                    <li><strong>Parámetros de la imagen:</strong> Exportación en formato <strong>Raw (dd)</strong>, un formato crudo de lectura universal que genera una copia exacta sector por sector sin alterar los metadatos de la imagen.</li>
+                    <li><strong>Documentación del caso:</strong> Asignación del número de caso <code>InfoCrim-01_21.11.2023</code> y registro del examinador para mantener estricta la cadena de custodia.</li>
+                    <li><strong>Ejecución y tiempos:</strong> El proceso duró aproximadamente 13 minutos, copiando de forma íntegra más de 30 millones de sectores de la memoria original.</li>
+                    <li><strong>Verificación de integridad:</strong> Se calcularon y contrastaron los algoritmos <strong>MD5</strong> (<code>a38954a45...</code>) y <strong>SHA-1</strong> (<code>f40c15d6c...</code>), obteniendo un <em>Match</em> perfecto que avala que no existen bloques defectuosos.</li>
+                    <li><strong>Artefactos generados:</strong> Se produjeron 10 segmentos de imagen (extensiones <code>.001</code> a <code>.010</code>) y 1 archivo de registro <code>.txt</code> con todo el resumen del procedimiento.</li>
+                </ul>
+            </section>
+
+            <!-- VISOR DE EVIDENCIAS -->
+            <section class="evidence-card">
+                <div class="card-number">03</div>
+                <h3>Evidencia Visual – Proceso de Adquisición</h3>
+                <p>
+                    A continuación se muestran las capturas del procedimiento realizado con la herramienta FTK Imager, desde la parametrización del origen hasta el volcado final y validación de los hashes.
+                </p>
+                
+                <div class="evidence-viewer">
+                    <!-- SUGERENCIA: Reemplaza estas rutas con las imágenes reales de tu práctica -->
+                    <img src="img/act16_1_ftk_install.png" alt="Instalación de FTK Imager">
+                    <img src="img/act16_2_ftk_source.png" alt="Selección de origen (Physical Drive)">
+                    <img src="img/act16_3_ftk_caseinfo.png" alt="Configuración de los datos del caso">
+                    <img src="img/act16_4_ftk_progress.png" alt="Progreso de la adquisición">
+                    <img src="img/act16_5_ftk_verify.png" alt="Resultados de la verificación de hashes MD5 y SHA-1">
+                    <img src="img/act16_6_archivos.png" alt="Archivos segmentados generados en formato Raw">
+                </div>
+                <p class="viewer-hint">↓ Desliza hacia abajo para ver todas las capturas ↓</p>
+            </section>
+
+            <!-- CONCLUSIONES -->
+            <section class="evidence-card">
+                <div class="card-number">04</div>
+                <h3>Conclusiones</h3>
+                <p>
+                    Se realizó exitosamente la adquisición forense bit a bit de la memoria USB utilizando FTK Imager en formato Raw (dd). Los hashes MD5 y SHA-1 coincidieron exactamente en la fase de verificación, confirmando la total integridad de la imagen obtenida.
+                </p>
+                <p>
+                    La correcta documentación del caso, la segmentación de los archivos (10 archivos de imagen y 1 archivo log) y el procedimiento documentado cumplen rigurosamente con los requisitos para preservar evidencia digital. Esto garantiza que la información recolectada sea completamente válida para un posterior peritaje estructurado, evitando cualquier alteración o corrupción en el estado original del dispositivo.
+                </p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2 - Portafolio de Evidencias.</p>
+        </footer>
+    </div>
+</body>
+</html>

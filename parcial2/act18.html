@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 18 - La Huella Digital de un Cibercriminal | Seguridad Informática</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>Actividad 18</h1>
+                <p class="alias">"La Investigación Forense: La Huella Digital de un Cibercriminal"</p>
+                <h2>Parcial 2 – Seguridad Informática</h2>
+                <p class="institution">
+                    <a href="index.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al Listado del Parcial 2</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+
+            <!-- SECCIÓN DE DESCARGA DEL INFORME -->
+            <section class="evidence-card" style="text-align: center; border-left: 4px solid var(--accent-dark);">
+                <div class="card-number">DOCX</div>
+                <h3>Informe de Actividad Completado</h3>
+                <p>
+                    Descarga el documento formal de la Actividad 18, el cual detalla el análisis forense de la imagen de disco 
+                    del caso CFREDS (Greg Schardt / Mr. Evil) realizado con Autopsy, incluyendo la cadena de custodia, 
+                    extracción de artefactos y correlación de evidencias.
+                </p>
+                
+                <a href="AroniaSilvaLuisEmmanuel-Act18.pdf" download class="btn-luxury" style="display: inline-block; text-decoration: none; margin-top: 15px;">
+                    Descargar Informe 📄
+                </a>
+            </section>
+
+            <!-- OBJETIVO -->
+            <section class="evidence-card">
+                <div class="card-number">01</div>
+                <h3>Objetivo de la Actividad</h3>
+                <p>
+                    Familiarizar al estudiante con la herramienta <strong>Autopsy</strong> para el análisis de imágenes forenses, 
+                    desarrollar habilidades prácticas en la investigación de incidentes de seguridad informática y comprender 
+                    la importancia de la cadena de custodia y la integridad de la evidencia digital. Se aplican los conocimientos 
+                    adquiridos para resolver un caso práctico real basado en el conjunto de datos CFREDS (Hacking Case) de NIST, 
+                    vinculando la computadora abandonada al sospechoso Greg Schardt, también conocido como “Mr. Evil”.
+                </p>
+            </section>
+
+            <!-- DESARROLLO -->
+            <section class="evidence-card">
+                <div class="card-number">02</div>
+                <h3>Desarrollo Técnico</h3>
+                <p>
+                    Se configuró un nuevo caso en Autopsy con el identificador <strong>INV01UPSLP</strong>, registrando la 
+                    organización Universidad Politécnica de San Luis Potosí y las notas correspondientes al caso de fraude (carding). 
+                    La evidencia consistió en la imagen forense dividida en ocho partes (<code>SCHARDT.001</code> a <code>SCHARDT.008</code>), 
+                    la cual fue importada como Disk Image. Se habilitaron todos los módulos de ingestión disponibles.
+                </p>
+                <p>
+                    Durante el análisis se extrajeron y verificaron los siguientes hallazgos principales:
+                </p>
+                <ul>
+                    <li><strong>Hash de la imagen:</strong> MD5 <code>aee4fcd9301c03b3b054623ca261959a</code> (verificado correctamente).</li>
+                    <li><strong>Sistema Operativo:</strong> Microsoft Windows XP.</li>
+                    <li><strong>Fecha de instalación:</strong> 19 de agosto de 2004, 22:48:27 UTC (valor de registro <code>InstallDate = 0x41252e3b</code>).</li>
+                    <li><strong>Zona horaria:</strong> Central Standard Time (CST) / Central Daylight Time (CDT).</li>
+                    <li><strong>Propietario registrado:</strong> Greg Schardt.</li>
+                    <li><strong>Nombre de la computadora:</strong> N-1A9ODN6ZXK4LQ.</li>
+                    <li><strong>Dominio principal:</strong> n-1a9odn6zxk4l1.</li>
+                    <li><strong>Último apagado:</strong> 27 de agosto de 2004, 15:46:33 UTC.</li>
+                    <li><strong>Cuentas registradas:</strong> 5 cuentas en total (incluyendo Mr. Evil como usuario principal).</li>
+                </ul>
+                <p>
+                    La correlación de evidencias permitió vincular de forma concluyente al usuario “Mr. Evil” con el sospechoso 
+                    Greg Schardt, a través de artefactos del registro y archivos de configuración de herramientas de red.
+                </p>
+            </section>
+
+            <!-- CONCLUSIONES -->
+            <section class="evidence-card">
+                <div class="card-number">03</div>
+                <h3>Conclusiones</h3>
+                <p>
+                    El análisis forense realizado con Autopsy sobre la imagen del caso CFREDS permitió reconstruir de manera 
+                    estructurada el perfil del sistema abandonado. Se confirmó que la computadora Dell CPi fue utilizada con 
+                    fines de interceptación de tráfico inalámbrico (carding), evidenciando la presencia de herramientas de 
+                    sniffing, cracking de contraseñas y descubrimiento de redes.
+                </p>
+                <p>
+                    La identificación del propietario registrado como Greg Schardt, junto con la cuenta de usuario “Mr. Evil” 
+                    y los artefactos de configuración, establece un vínculo sólido entre el equipo y el sospechoso. Este ejercicio 
+                    refuerza la importancia de documentar cada paso del proceso forense, mantener la integridad de la evidencia 
+                    mediante verificación de hashes y correlacionar múltiples fuentes de datos para construir un caso sólido 
+                    y defendible.
+                </p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2 - Portafolio de Evidencias.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -3,244 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PR02 — Seguridad Ofensiva INTERAFAS</title>
+    <title>PR03 — Informática Forense: Operación Narcos</title>
     <link rel="stylesheet" href="../style.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos propios de esta página; usan las variables de tu style.css con valores de respaldo */
+        .qa-group { margin-top: 1.5rem; }
+        .qa-group > h4 { font-family: 'Playfair Display', serif; font-weight: 600; margin: 0 0 .75rem; }
+        details.qa { border: 1px solid var(--accent-dark, #8a6d3b); border-radius: 4px; margin-bottom: .6rem; background: rgba(255,255,255,.6); }
+        details.qa > summary { cursor: pointer; padding: .8rem 1rem; font-weight: 700; list-style: none; display: flex; gap: .75rem; align-items: baseline; }
+        details.qa > summary::-webkit-details-marker { display: none; }
+        details.qa > summary::before { content: "+"; color: var(--accent-dark, #8a6d3b); font-weight: 700; width: 1rem; flex: none; }
+        details.qa[open] > summary::before { content: "−"; }
+        details.qa > summary:focus-visible { outline: 2px solid var(--accent-dark, #8a6d3b); outline-offset: 2px; }
+        .qa-body { padding: 0 1rem 1rem 2.75rem; line-height: 1.6; }
+        .qa-body p { margin: .4rem 0; }
+        .qa-body code { font-size: .85em; word-break: break-all; background: rgba(0,0,0,.05); padding: .1rem .3rem; border-radius: 3px; }
+        .qa-body dl { margin: .5rem 0; }
+        .qa-body dt { font-weight: 700; margin-top: .5rem; }
+        .qa-body dd { margin: 0; }
+        figure.shot { margin: .9rem 0 0; }
+        figure.shot img { max-width: 100%; height: auto; display: block; border: 1px solid rgba(0,0,0,.15); border-radius: 4px; }
+        figure.shot figcaption { font-size: .8rem; opacity: .75; margin-top: .3rem; }
+        /* Si la imagen aún no existe, se muestra un recuadro vacío */
+        figure.shot.empty img { display: none; }
+        figure.shot.empty::before { content: "Espacio para captura de pantalla"; display: grid; place-items: center; min-height: 140px; border: 2px dashed var(--accent-dark, #8a6d3b); border-radius: 4px; opacity: .7; font-size: .9rem; }
+        .controls { display: flex; gap: .6rem; margin-bottom: 1rem; }
+        .controls button { font: inherit; padding: .4rem .9rem; border: 1px solid var(--accent-dark, #8a6d3b); background: transparent; color: inherit; border-radius: 4px; cursor: pointer; }
+    </style>
 </head>
 <body>
     <div class="side-ornament left"></div>
     <div class="side-ornament right"></div>
     <div class="luxury-container fade-in">
-        
+
         <header class="luxury-header">
             <div class="header-content">
-                <h1>PR02</h1>
-                <p class="alias">"Blindando la información"</p>
-                <h2>Seguridad Ofensiva — INTERAFAS</h2>
+                <h1>PR03</h1>
+                <p class="alias">"Operación Narcos: expediente Kowhai"</p>
+                <h2>Informática Forense — Imagen Narcos-1</h2>
                 <p class="institution">
-                    <a href="index.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al Parcial 2</a>
+                    <a href="index.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al parcial</a>
                 </p>
             </div>
         </header>
 
         <main class="luxury-main">
-            
+
             <section>
                 <h3>Descripción del proyecto</h3>
                 <p>
-                    Auditoría de seguridad ofensiva realizada sobre el laboratorio INTERAFAS. 
-                    Se identificaron 20 vulnerabilidades técnicas que abarcan exposición de información residual, 
-                    fallas de control de acceso (IDOR/BOLA), inyección SQL, XSS almacenado, fijación de sesión, 
-                    manipulación de lógica de negocio en pagos y compromiso de la red operacional (OT).
+                    Análisis forense de la imagen de disco Narcos-1, equipo relacionado con Steve Kowhai, del escenario
+                    2019 Narcos de Digital Corpora (Digital Corpora, 2019). Con Autopsy 4.23.1 se localizaron archivos de vuelo y
+                    mapas de Wellington, la presencia de Discord y la descarga, instalación y ejecución de TrueCrypt e Image
+                    Steganography. Todas las fechas se muestran en hora de Nueva Zelanda (NZDT, UTC+13), convertidas desde CST.
                 </p>
             </section>
 
             <section>
-                <h3>Entregas del proyecto</h3>
+                <h3>Entrega del proyecto</h3>
                 <div class="activity-list">
-                    <a href="../informes/02.AroniaSilvaLuisEmmanuel_InformeSeguridadOfensiva.pdf" class="activity-card-horizontal" download>
-                        <div class="act-number">02</div>
-                        <div class="act-info">
-                            <h3>Informe de Seguridad Ofensiva</h3>
-                            <p>PR02-01 a PR02-10</p>
-                        </div>
-                    </a>
-                    <a href="../informes/03.AroniaSilvaLuisEmmanuel_ISO27.pdf" class="activity-card-horizontal" download>
+                    <!-- Cambia el nombre del PDF por el real -->
+                    <a href="../informes/PR03.AroniaSilvaLuisEmmanuel_ExpedienteKowhai.pdf" class="activity-card-horizontal" download>
                         <div class="act-number">03</div>
                         <div class="act-info">
-                            <h3>Propuesta de Gobernanza ISO 27001</h3>
-                            <p>PR02-11 a PR02-20</p>
-                        </div>
-                    </a>
-                    <a href="../informes/04.AroniaSilvaLuisEmmanuel_PlanComunicacionCrisis.pdf" class="activity-card-horizontal" download>
-                        <div class="act-number">04</div>
-                        <div class="act-info">
-                            <h3>Plan de Comunicación de Crisis</h3>
-                            <p>PR02-21 a PR02-30</p>
-                        </div>
-                    </a>
-                    <a href="../informes/05.AroniaSilvaLuisEmmanuel_PlanRespuestaAnteIncidentes.pdf" class="activity-card-horizontal" download>
-                        <div class="act-number">05</div>
-                        <div class="act-info">
-                            <h3>Plan de Respuesta ante Incidentes</h3>
-                            <p>PR02-31 a PR02-40</p>
+                            <h3>Informe de análisis forense</h3>
+                            <p>Parte I (15 preguntas) y Parte II (5 preguntas)</p>
                         </div>
                     </a>
                 </div>
             </section>
 
             <section>
-                <h3>Vulnerabilidades identificadas</h3>
-                <div class="activity-list">
-
-                    <a href="../vulnerabilidades/vuln-01.html" class="activity-card-horizontal">
-                        <div class="act-number">01</div>
-                        <div class="act-info">
-                            <h3>VULN-01</h3>
-                            <p>Exposición de información sensible mediante archivos residuales</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-02.html" class="activity-card-horizontal">
-                        <div class="act-number">02</div>
-                        <div class="act-info">
-                            <h3>VULN-02</h3>
-                            <p>Exposición de artefactos de construcción y rutas API en frontend</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-03.html" class="activity-card-horizontal">
-                        <div class="act-number">03</div>
-                        <div class="act-info">
-                            <h3>VULN-03</h3>
-                            <p>Referencia directa insegura a objetos (IDOR) en expedientes y facturación</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-04.html" class="activity-card-horizontal">
-                        <div class="act-number">04</div>
-                        <div class="act-info">
-                            <h3>VULN-04</h3>
-                            <p>Exposición de código fuente mediante archivos de respaldo residuales</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-05.html" class="activity-card-horizontal">
-                        <div class="act-number">05</div>
-                        <div class="act-info">
-                            <h3>VULN-05</h3>
-                            <p>Divulgación de información sensible mediante manejo inadecuado de errores</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-06.html" class="activity-card-horizontal">
-                        <div class="act-number">06</div>
-                        <div class="act-info">
-                            <h3>VULN-06</h3>
-                            <p>Escalamiento de privilegios mediante manipulación de cookies</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-07.html" class="activity-card-horizontal">
-                        <div class="act-number">07</div>
-                        <div class="act-info">
-                            <h3>VULN-07</h3>
-                            <p>Inyección SQL ciega basada en booleanos en validación de referencias</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-08.html" class="activity-card-horizontal">
-                        <div class="act-number">08</div>
-                        <div class="act-info">
-                            <h3>VULN-08</h3>
-                            <p>Cross-Site Scripting almacenado (Stored XSS) en sistema de reportes</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-09.html" class="activity-card-horizontal">
-                        <div class="act-number">09</div>
-                        <div class="act-info">
-                            <h3>VULN-09</h3>
-                            <p>Salto de directorio (Path Traversal / LFI) en descarga de documentos</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-10.html" class="activity-card-horizontal">
-                        <div class="act-number">10</div>
-                        <div class="act-info">
-                            <h3>VULN-10</h3>
-                            <p>Fijación de sesión (Session Fixation)</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-11.html" class="activity-card-horizontal">
-                        <div class="act-number">11</div>
-                        <div class="act-info">
-                            <h3>VULN-11</h3>
-                            <p>Fuga de información sensible mediante encabezados HTTP personalizados</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-12.html" class="activity-card-horizontal">
-                        <div class="act-number">12</div>
-                        <div class="act-info">
-                            <h3>VULN-12</h3>
-                            <p>IDOR / BOLA en API de historial de servicios</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-13.html" class="activity-card-horizontal">
-                        <div class="act-number">13</div>
-                        <div class="act-info">
-                            <h3>VULN-13</h3>
-                            <p>Manipulación de parámetros y falla en lógica de negocio (pagos incompletos)</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-14.html" class="activity-card-horizontal">
-                        <div class="act-number">14</div>
-                        <div class="act-info">
-                            <h3>VULN-14</h3>
-                            <p>Falla lógica en la validación de vínculos contractuales</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-15.html" class="activity-card-horizontal">
-                        <div class="act-number">15</div>
-                        <div class="act-info">
-                            <h3>VULN-15</h3>
-                            <p>Fuga de información sensible en encabezados HTTP (API de infraestructura)</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-16.html" class="activity-card-horizontal">
-                        <div class="act-number">16</div>
-                        <div class="act-info">
-                            <h3>VULN-16</h3>
-                            <p>Evasión de controles de red mediante falsificación de IP</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-17.html" class="activity-card-horizontal">
-                        <div class="act-number">17</div>
-                        <div class="act-info">
-                            <h3>VULN-17</h3>
-                            <p>Control de acceso inconsistente y exposición de telemetría (Broken Access Control en API OT)</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-18.html" class="activity-card-horizontal">
-                        <div class="act-number">18</div>
-                        <div class="act-info">
-                            <h3>VULN-18</h3>
-                            <p>Criptografía insegura y falsificación de firmware en equipos OT</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-19.html" class="activity-card-horizontal">
-                        <div class="act-number">19</div>
-                        <div class="act-info">
-                            <h3>VULN-19</h3>
-                            <p>Exposición de topología y dependencias de la red operacional</p>
-                        </div>
-                    </a>
-
-                    <a href="../vulnerabilidades/vuln-20.html" class="activity-card-horizontal">
-                        <div class="act-number">20</div>
-                        <div class="act-info">
-                            <h3>VULN-20</h3>
-                            <p>Alteración de parámetros operativos por falta de validación de límites</p>
-                        </div>
-                    </a>
-
+                <h3>Preguntas y respuestas</h3>
+                <p>Abre cada pregunta para ver la respuesta, la ruta en la imagen y la captura que la respalda.</p>
+                <div class="controls">
+                    <button type="button" id="abrir">Abrir todas</button>
+                    <button type="button" id="cerrar">Cerrar todas</button>
                 </div>
+
+                <!-- ============ PARTE I ============ -->
+                <div class="qa-group">
+                    <h4>Parte I. Extracción e identificación de evidencia digital</h4>
+
+                    <details class="qa"><summary>1. ¿Qué edición y versión de Windows están instaladas?</summary>
+                        <div class="qa-body">
+                            <p><strong>Windows 10 Pro, versión 1809.</strong></p>
+                            <p>Artefacto: hive SOFTWARE. Ruta: <code>/img_Narcos-1.001/vol_vol7/Windows/System32/config/SOFTWARE</code>. Consultado en la pestaña Strings de Autopsy (“ProductName”, “Windows 10 Pro”).</p>
+                            <figure class="shot"><img src="../img/pr03/q01.png" alt="Pestaña Strings del hive SOFTWARE con Windows 10 Pro" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: hive SOFTWARE en Autopsy</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>2. ¿Cuál es el perfil principal y su ruta absoluta?</summary>
+                        <div class="qa-body">
+                            <p><strong>Steve.</strong> Ruta: <code>/img_Narcos-1.001/vol_vol7/Users/Steve</code> (equivale a <code>C:\Users\Steve</code>). Es el único perfil de usuario; las demás carpetas son All Users, Default, Default User y Public.</p>
+                            <figure class="shot"><img src="../img/pr03/q02.png" alt="Carpeta Users con el perfil Steve" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: carpeta Users</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>3. ¿Cuál es la ruta de la clave UserAssist del perfil principal?</summary>
+                        <div class="qa-body">
+                            <p><code>Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist</code>, dentro de <code>/img_Narcos-1.001/vol_vol7/Users/Steve/NTUSER.DAT</code>. Consultado en la pestaña Application de Autopsy.</p>
+                            <figure class="shot"><img src="../img/pr03/q03.png" alt="Clave UserAssist en NTUSER.DAT" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: UserAssist en el visor de registro</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>4. ¿Qué dos navegadores presentan actividad y dónde está su historial?</summary>
+                        <div class="qa-body">
+                            <p><strong>Google Chrome y Microsoft Edge</strong> (Data Artifacts → Web History, 994 resultados).</p>
+                            <dl>
+                                <dt>Chrome</dt><dd><code>/img_Narcos-1.001/vol_vol7/Users/Steve/AppData/Local/Google/Chrome/User Data/Default/History</code></dd>
+                                <dt>Edge</dt><dd>Registros del analizador “Microsoft Edge Analyzer”; carpeta <code>/img_Narcos-1.001/vol_vol7/Users/Steve/AppData/Local/Packages/Microsoft.MicrosoftEdge_8wekyb3d8bbwe/AC/MicrosoftEdge/History</code></dd>
+                            </dl>
+                            <figure class="shot"><img src="../img/pr03/q04.png" alt="Web History con Chrome y Edge" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: Web History</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>5. ¿Cuál es el MD5 del archivo History de Chrome?</summary>
+                        <div class="qa-body">
+                            <p><code>f3f979c6dee9fbb7cbdf5818aaa4b723</code></p>
+                            <p>Obtenido en File Metadata de Autopsy.</p>
+                            <figure class="shot"><img src="../img/pr03/q05.png" alt="File Metadata del archivo History" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: File Metadata</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>6. ¿Cuál es la ruta absoluta de airport crystals.jpg?</summary>
+                        <div class="qa-body">
+                            <p><code>/img_Narcos-1.001/vol_vol7/Users/Steve/Documents/Misc/airport crystals.jpg</code></p>
+                            <figure class="shot"><img src="../img/pr03/q06.png" alt="Carpeta Documents\Misc en Autopsy" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: Documents\Misc</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>7. ¿Cuándo se creó airport crystals.jpg (NZDT)?</summary>
+                        <div class="qa-body">
+                            <p><strong>2019-01-31 10:25:18 NZDT.</strong></p>
+                            <p>Autopsy mostró 2019-01-30 15:25:18 CST (UTC-6); al sumar 19 horas resulta la hora en NZDT (UTC+13).</p>
+                            <figure class="shot"><img src="../img/pr03/q07.png" alt="Campo Created de airport crystals.jpg" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: campo Created</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>8. ¿Cuál es el MD5 de dropoff.jpg?</summary>
+                        <div class="qa-body">
+                            <p><code>7feb763bebe42c3a3464c9ee3bb1d3e8</code></p>
+                            <p>Ruta: <code>/img_Narcos-1.001/vol_vol7/Users/Steve/Documents/Misc/dropoff.jpg</code></p>
+                            <figure class="shot"><img src="../img/pr03/q08.png" alt="MD5 de dropoff.jpg" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: File Metadata</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>9. ¿Cuándo se modificó por última vez dropoff.jpg (NZDT)?</summary>
+                        <div class="qa-body">
+                            <p><strong>2019-02-02 14:06:06 NZDT</strong> (Autopsy mostró 2019-02-01 19:06:06 CST; +19 horas).</p>
+                            <figure class="shot"><img src="../img/pr03/q09.png" alt="Campo Modified de dropoff.jpg" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: campo Modified</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>10. ¿Qué archivo de imagen se relaciona con reservaciones de vuelo?</summary>
+                        <div class="qa-body">
+                            <p><strong>flightbookings.PNG</strong>, en <code>/img_Narcos-1.001/vol_vol7/Users/Steve/Documents/Misc/flightbookings.PNG</code>.</p>
+                            <p>Es una cotización de vuelo Brisbane (BNE) → Wellington (WLG) el 16 de febrero de 2019, con regreso el 23 de febrero, para dos adultos (AU$1,327.82). La página invita a reservar («Book now»), por lo que no es una confirmación de compra.</p>
+                            <figure class="shot"><img src="../img/pr03/q10.png" alt="Cotización de vuelo BNE a WLG" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: flightbookings.PNG</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>11. ¿Cuál es el MD5 de Method run.jpg?</summary>
+                        <div class="qa-body">
+                            <p><code>69b225bc0ef5a0c003f1e2a6646aaf92</code></p>
+                            <p>Ruta: <code>/img_Narcos-1.001/vol_vol7/Users/Steve/Documents/Misc/Method run.jpg</code></p>
+                            <figure class="shot"><img src="../img/pr03/q11.png" alt="MD5 de Method run.jpg" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: File Metadata</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>12. ¿Cuál es el MD5 completo de BNE.png?</summary>
+                        <div class="qa-body">
+                            <p><code>dffa98bdd7371d1806adb09db27ba283</code></p>
+                            <p>Ruta: <code>/img_Narcos-1.001/vol_vol7/Users/Steve/Downloads/Misc/BNE.png</code>. PNG de 4,376,793 bytes, creado el 2019-02-01 13:13:19 NZDT.</p>
+                            <figure class="shot"><img src="../img/pr03/q12.png" alt="MD5 de BNE.png" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: File Metadata</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>13. ¿Nombre, ruta y MD5 del instalador de esteganografía?</summary>
+                        <div class="qa-body">
+                            <p><strong>Image Steganography 1.5.2 Setup.exe</strong>, MD5 <code>c9b7c382dea6d7f45ae1bf437860cb69</code>.</p>
+                            <p>Ruta: <code>/img_Narcos-1.001/vol_vol7/Users/Steve/Downloads/Image Steganography 1.5.2 Setup.exe</code></p>
+                            <figure class="shot"><img src="../img/pr03/q13.png" alt="Instalador de Image Steganography" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: carpeta Downloads</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>14. ¿Nombre y ruta del instalador de cifrado?</summary>
+                        <div class="qa-body">
+                            <p><strong>TrueCrypt Setup 7.1a.exe</strong>, en <code>/img_Narcos-1.001/vol_vol7/Users/Steve/Downloads/TrueCrypt Setup 7.1a.exe</code>.</p>
+                            <figure class="shot"><img src="../img/pr03/q14.png" alt="Instalador de TrueCrypt" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: carpeta Downloads</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>15. ¿Rutas de la caché de Discord y de ActivitiesCache.db?</summary>
+                        <div class="qa-body">
+                            <dl>
+                                <dt>Caché de Discord</dt><dd><code>/img_Narcos-1.001/vol_vol7/Users/Steve/AppData/Roaming/Discord/Cache</code></dd>
+                                <dt>Windows Timeline</dt><dd><code>/img_Narcos-1.001/vol_vol7/Users/Steve/AppData/Local/ConnectedDevicesPlatform/2418c0082017486a/ActivitiesCache.db</code></dd>
+                            </dl>
+                            <figure class="shot"><img src="../img/pr03/q15.png" alt="Caché de Discord y ActivitiesCache.db" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: rutas en Autopsy</figcaption></figure>
+                        </div></details>
+                </div>
+
+                <!-- ============ PARTE II ============ -->
+                <div class="qa-group">
+                    <h4>Parte II. Investigación, interpretación y análisis del caso</h4>
+
+                    <details class="qa"><summary>16. flightbookings, BNE.png y dropoff.jpg: ¿qué coincidencias hay?</summary>
+                        <div class="qa-body">
+                            <dl>
+                                <dt>Observado</dt><dd>Cotización BNE → WLG (16-feb-2019); fotografía de Brisbane (Story Bridge); captura de la Eastbourne Library. Creados el 2019-02-01 13:13:19 (BNE.png), 2019-02-02 14:06:05 (dropoff.jpg) y 2019-02-02 15:28:44 (flightbookings.PNG), NZDT.</dd>
+                                <dt>Interpretación</dt><dd>Coincidencias geográficas entre Brisbane y Wellington, con un punto de interés en Eastbourne, acordes con el contexto del caso.</dd>
+                                <dt>No puede confirmarse</dt><dd>Que el usuario viajó, que dropoff.jpg sea un punto de entrega real, que la cotización se convirtió en compra o el propósito del desplazamiento.</dd>
+                            </dl>
+                            <figure class="shot"><img src="../img/pr03/q16.png" alt="Las tres imágenes analizadas" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: flightbookings, BNE.png y dropoff.jpg</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>17. airport crystals.jpg y Method run.jpg: ¿qué finalidad puede sostenerse?</summary>
+                        <div class="qa-body">
+                            <dl>
+                                <dt>Observado</dt><dd>Capturas de Google Maps del área de Wellington, Lower Hutt y Eastbourne, con la marca «Home». Se crearon con unos 4 minutos de diferencia: 2019-01-31 10:21:24 NZDT (Method run.jpg) y 10:25:18 NZDT (airport crystals.jpg).</dd>
+                                <dt>Interpretación</dt><dd>Planificación de rutas o puntos de interés en la zona de Wellington.</dd>
+                                <dt>Limitación</dt><dd>La evidencia demuestra la existencia y fechas de creación; no confirma que las rutas se recorrieran ni su finalidad.</dd>
+                            </dl>
+                            <figure class="shot"><img src="../img/pr03/q17.png" alt="Capturas de Google Maps con la marca Home" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: airport crystals.jpg y Method run.jpg</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>18. ¿Qué evidencia indica que Discord estuvo presente o se usó?</summary>
+                        <div class="qa-body">
+                            <dl>
+                                <dt>Observado</dt><dd>DiscordSetup.exe en Downloads\Misc; carpetas 0.0.304, blob_storage y Cache (130 elementos) en AppData\Roaming\Discord, con archivos modificados hasta 2019-02-02 15:39:28 NZDT.</dd>
+                                <dt>Interpretación</dt><dd>Discord estuvo presente y se ejecutó al menos una vez, porque la caché se genera con el uso.</dd>
+                                <dt>Limitación</dt><dd>Sin mensajes verificables no se pueden determinar conversaciones, interlocutores ni autoría.</dd>
+                            </dl>
+                            <figure class="shot"><img src="../img/pr03/q18.png" alt="Caché de Discord en Autopsy" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: carpeta Discord</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>19. Esteganografía y cifrado: descarga, instalación, ejecución y uso efectivo</summary>
+                        <div class="qa-body">
+                            <dl>
+                                <dt>Image Steganography 1.5.2</dt><dd>Descarga: instalador creado el 2019-02-01 13:16:32 NZDT. Instalación: <code>AppData\Roaming\CPascoe\Image Steganography\ProgData</code>. Ejecución: BAM y SRUDB. Uso efectivo: no evidenciado.</dd>
+                                <dt>TrueCrypt 7.1a</dt><dd>Descarga: instalador creado el 2019-01-30 12:27:43 NZDT. Instalación: <code>Program Files\TrueCrypt\</code>. Ejecución: BAM, SRUDB y Prefetch. Uso efectivo: no evidenciado.</dd>
+                                <dt>Conclusión</dt><dd>Ambas herramientas se descargaron, instalaron y ejecutaron; ejecutar no demuestra que produjeran un resultado.</dd>
+                            </dl>
+                            <figure class="shot"><img src="../img/pr03/q19.png" alt="Evidencias de TrueCrypt e Image Steganography" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: Prefetch y ProgData</figcaption></figure>
+                        </div></details>
+
+                    <details class="qa"><summary>20. Hipótesis, explicación alternativa, hallazgos y evidencias adicionales</summary>
+                        <div class="qa-body">
+                            <dl>
+                                <dt>Hipótesis</dt><dd>Indicios de planificación logística entre Brisbane y Wellington, con herramientas de cifrado y esteganografía y presencia de Discord.</dd>
+                                <dt>Cuatro hallazgos</dt><dd>1) Archivos de vuelo y mapas. 2) Herramientas de cifrado y esteganografía ejecutadas. 3) Presencia de Discord. 4) Actividad concentrada del 30-ene al 2-feb de 2019 (NZDT).</dd>
+                                <dt>Explicación alternativa</dt><dd>Planificación de un viaje personal; las herramientas son legales y no hay evidencia de uso efectivo. Pierde fuerza por la coincidencia con el caso, pero el disco no la descarta.</dd>
+                                <dt>Evidencias adicionales</dt><dd>1) Análisis del volcado de memoria. 2) Mensajes de Discord y búsqueda de contenido cifrado u oculto (por ejemplo, BNE.png).</dd>
+                            </dl>
+                            <figure class="shot"><img src="../img/pr03/q20.png" alt="Línea de tiempo o esquema de hallazgos" onerror="this.parentElement.classList.add('empty')"><figcaption>Espacio opcional: esquema o línea de tiempo</figcaption></figure>
+                        </div></details>
+                </div>
+            </section>
+
+            <section>
+                <h3>Referencias</h3>
+                <p>Basis Technology. (s. f.). <em>Autopsy</em> [Software]. https://www.autopsy.com/</p>
+                <p>Digital Corpora. (2019). <em>2019 Narcos</em> [Conjunto de datos]. https://digitalcorpora.org/corpora/scenarios/2019-narcos/</p>
+                <p>Garfinkel, S., Farrell, P., Roussev, V. y Dinolt, G. (2009). <em>Bringing science to digital forensics with standardized forensic corpora</em>. DFRWS, Montreal, Canadá. https://simson.net/clips/academic/2009.DFRWS.Corpora.pdf</p>
             </section>
 
         </main>
 
         <footer class="luxury-footer">
-            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 2.</p>
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Parcial 3.</p>
         </footer>
     </div>
+
+    <script>
+        const todas = () => document.querySelectorAll('details.qa');
+        document.getElementById('abrir').addEventListener('click', () => todas().forEach(d => d.open = true));
+        document.getElementById('cerrar').addEventListener('click', () => todas().forEach(d => d.open = false));
+    </script>
 </body>
 </html>

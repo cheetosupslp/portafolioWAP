@@ -90,19 +90,19 @@
                         <div class="qa-body">
                             <p><strong>Windows 10 Pro, versión 1809.</strong></p>
                             <p>Artefacto: hive SOFTWARE. Ruta: <code>/img_Narcos-1.001/vol_vol7/Windows/System32/config/SOFTWARE</code>. Consultado en la pestaña Strings de Autopsy (“ProductName”, “Windows 10 Pro”).</p>
-                            <figure class="shot"><img src="../img/pr03/q01.png" alt="Pestaña Strings del hive SOFTWARE con Windows 10 Pro" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: hive SOFTWARE en Autopsy</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q01.png" alt="Pestaña Strings del hive SOFTWARE con Windows 10 Pro" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: hive SOFTWARE en Autopsy</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>2. ¿Cuál es el perfil principal y su ruta absoluta?</summary>
                         <div class="qa-body">
                             <p><strong>Steve.</strong> Ruta: <code>/img_Narcos-1.001/vol_vol7/Users/Steve</code> (equivale a <code>C:\Users\Steve</code>). Es el único perfil de usuario; las demás carpetas son All Users, Default, Default User y Public.</p>
-                            <figure class="shot"><img src="../img/pr03/q02.png" alt="Carpeta Users con el perfil Steve" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: carpeta Users</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q02.png" alt="Carpeta Users con el perfil Steve" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: carpeta Users</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>3. ¿Cuál es la ruta de la clave UserAssist del perfil principal?</summary>
                         <div class="qa-body">
                             <p><code>Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist</code>, dentro de <code>/img_Narcos-1.001/vol_vol7/Users/Steve/NTUSER.DAT</code>. Consultado en la pestaña Application de Autopsy.</p>
-                            <figure class="shot"><img src="../img/pr03/q03.png" alt="Clave UserAssist en NTUSER.DAT" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: UserAssist en el visor de registro</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q03.png" alt="Clave UserAssist en NTUSER.DAT" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: UserAssist en el visor de registro</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>4. ¿Qué dos navegadores presentan actividad y dónde está su historial?</summary>
@@ -112,74 +112,74 @@
                                 <dt>Chrome</dt><dd><code>/img_Narcos-1.001/vol_vol7/Users/Steve/AppData/Local/Google/Chrome/User Data/Default/History</code></dd>
                                 <dt>Edge</dt><dd>Registros del analizador “Microsoft Edge Analyzer”; carpeta <code>/img_Narcos-1.001/vol_vol7/Users/Steve/AppData/Local/Packages/Microsoft.MicrosoftEdge_8wekyb3d8bbwe/AC/MicrosoftEdge/History</code></dd>
                             </dl>
-                            <figure class="shot"><img src="../img/pr03/q04.png" alt="Web History con Chrome y Edge" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: Web History</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q04.png" alt="Web History con Chrome y Edge" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: Web History</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>5. ¿Cuál es el MD5 del archivo History de Chrome?</summary>
                         <div class="qa-body">
                             <p><code>f3f979c6dee9fbb7cbdf5818aaa4b723</code></p>
                             <p>Obtenido en File Metadata de Autopsy.</p>
-                            <figure class="shot"><img src="../img/pr03/q05.png" alt="File Metadata del archivo History" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: File Metadata</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q05.png" alt="File Metadata del archivo History" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: File Metadata</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>6. ¿Cuál es la ruta absoluta de airport crystals.jpg?</summary>
                         <div class="qa-body">
                             <p><code>/img_Narcos-1.001/vol_vol7/Users/Steve/Documents/Misc/airport crystals.jpg</code></p>
-                            <figure class="shot"><img src="../img/pr03/q06.png" alt="Carpeta Documents\Misc en Autopsy" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: Documents\Misc</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q06.png" alt="Carpeta Documents\Misc en Autopsy" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: Documents\Misc</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>7. ¿Cuándo se creó airport crystals.jpg (NZDT)?</summary>
                         <div class="qa-body">
                             <p><strong>2019-01-31 10:25:18 NZDT.</strong></p>
                             <p>Autopsy mostró 2019-01-30 15:25:18 CST (UTC-6); al sumar 19 horas resulta la hora en NZDT (UTC+13).</p>
-                            <figure class="shot"><img src="../img/pr03/q07.png" alt="Campo Created de airport crystals.jpg" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: campo Created</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q07.png" alt="Campo Created de airport crystals.jpg" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: campo Created</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>8. ¿Cuál es el MD5 de dropoff.jpg?</summary>
                         <div class="qa-body">
                             <p><code>7feb763bebe42c3a3464c9ee3bb1d3e8</code></p>
                             <p>Ruta: <code>/img_Narcos-1.001/vol_vol7/Users/Steve/Documents/Misc/dropoff.jpg</code></p>
-                            <figure class="shot"><img src="../img/pr03/q08.png" alt="MD5 de dropoff.jpg" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: File Metadata</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q08.png" alt="MD5 de dropoff.jpg" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: File Metadata</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>9. ¿Cuándo se modificó por última vez dropoff.jpg (NZDT)?</summary>
                         <div class="qa-body">
                             <p><strong>2019-02-02 19:06:06 NZDT</strong> (Autopsy mostró 2019-02-01 19:06:06 CST; +19 horas).</p>
-                            <figure class="shot"><img src="../img/pr03/q08.png" alt="Campo Modified de dropoff.jpg" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: campo Modified</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q08.png" alt="Campo Modified de dropoff.jpg" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: campo Modified</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>10. ¿Qué archivo de imagen se relaciona con reservaciones de vuelo?</summary>
                         <div class="qa-body">
                             <p><strong>flightbookings.PNG</strong>, en <code>/img_Narcos-1.001/vol_vol7/Users/Steve/Documents/Misc/flightbookings.PNG</code>.</p>
                             <p>Es una cotización de vuelo Brisbane (BNE) → Wellington (WLG) el 16 de febrero de 2019, con regreso el 23 de febrero, para dos adultos (AU$1,327.82). La página invita a reservar («Book now»), por lo que no es una confirmación de compra.</p>
-                            <figure class="shot"><img src="../img/pr03/q10.png" alt="Cotización de vuelo BNE a WLG" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: flightbookings.PNG</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q10.png" alt="Cotización de vuelo BNE a WLG" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: flightbookings.PNG</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>11. ¿Cuál es el MD5 de Method run.jpg?</summary>
                         <div class="qa-body">
                             <p><code>69b225bc0ef5a0c003f1e2a6646aaf92</code></p>
                             <p>Ruta: <code>/img_Narcos-1.001/vol_vol7/Users/Steve/Documents/Misc/Method run.jpg</code></p>
-                            <figure class="shot"><img src="../img/pr03/q11.png" alt="MD5 de Method run.jpg" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: File Metadata</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q11.png" alt="MD5 de Method run.jpg" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: File Metadata</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>12. ¿Cuál es el MD5 completo de BNE.png?</summary>
                         <div class="qa-body">
                             <p><code>dffa98bdd7371d1806adb09db27ba283</code></p>
                             <p>Ruta: <code>/img_Narcos-1.001/vol_vol7/Users/Steve/Downloads/Misc/BNE.png</code>. PNG de 4,376,793 bytes, creado el 2019-02-01 13:13:19 NZDT.</p>
-                            <figure class="shot"><img src="../img/pr03/q12.png" alt="MD5 de BNE.png" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: File Metadata</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q12.png" alt="MD5 de BNE.png" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: File Metadata</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>13. ¿Nombre, ruta y MD5 del instalador de esteganografía?</summary>
                         <div class="qa-body">
                             <p><strong>Image Steganography 1.5.2 Setup.exe</strong>, MD5 <code>c9b7c382dea6d7f45ae1bf437860cb69</code>.</p>
                             <p>Ruta: <code>/img_Narcos-1.001/vol_vol7/Users/Steve/Downloads/Image Steganography 1.5.2 Setup.exe</code></p>
-                            <figure class="shot"><img src="../img/pr03/q13.png" alt="Instalador de Image Steganography" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: carpeta Downloads</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q13.png" alt="Instalador de Image Steganography" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: carpeta Downloads</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>14. ¿Nombre y ruta del instalador de cifrado?</summary>
                         <div class="qa-body">
                             <p><strong>TrueCrypt Setup 7.1a.exe</strong>, en <code>/img_Narcos-1.001/vol_vol7/Users/Steve/Downloads/TrueCrypt Setup 7.1a.exe</code>.</p>
-                            <figure class="shot"><img src="../img/pr03/q14.png" alt="Instalador de TrueCrypt" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: carpeta Downloads</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q14.png" alt="Instalador de TrueCrypt" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: carpeta Downloads</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>15. ¿Rutas de la caché de Discord y de ActivitiesCache.db?</summary>
@@ -188,7 +188,7 @@
                                 <dt>Caché de Discord</dt><dd><code>/img_Narcos-1.001/vol_vol7/Users/Steve/AppData/Roaming/Discord/Cache</code></dd>
                                 <dt>Windows Timeline</dt><dd><code>/img_Narcos-1.001/vol_vol7/Users/Steve/AppData/Local/ConnectedDevicesPlatform/2418c0082017486a/ActivitiesCache.db</code></dd>
                             </dl>
-                            <figure class="shot"><img src="../img/pr03/q15.png" alt="Caché de Discord y ActivitiesCache.db" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: rutas en Autopsy</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q15.png" alt="Caché de Discord y ActivitiesCache.db" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: rutas en Autopsy</figcaption></figure>
                         </div></details>
                 </div>
 
@@ -203,7 +203,7 @@
                                 <dt>Interpretación</dt><dd>Coincidencias geográficas entre Brisbane y Wellington, con un punto de interés en Eastbourne, acordes con el contexto del caso.</dd>
                                 <dt>No puede confirmarse</dt><dd>Que el usuario viajó, que dropoff.jpg sea un punto de entrega real, que la cotización se convirtió en compra o el propósito del desplazamiento.</dd>
                             </dl>
-                            <figure class="shot"><img src="../img/pr03/q16.png" alt="Las tres imágenes analizadas" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: flightbookings, BNE.png y dropoff.jpg</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q16.png" alt="Las tres imágenes analizadas" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: flightbookings, BNE.png y dropoff.jpg</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>17. airport crystals.jpg y Method run.jpg: ¿qué finalidad puede sostenerse?</summary>
@@ -213,7 +213,7 @@
                                 <dt>Interpretación</dt><dd>Planificación de rutas o puntos de interés en la zona de Wellington.</dd>
                                 <dt>Limitación</dt><dd>La evidencia demuestra la existencia y fechas de creación; no confirma que las rutas se recorrieran ni su finalidad.</dd>
                             </dl>
-                            <figure class="shot"><img src="../img/pr03/q17.png" alt="Capturas de Google Maps con la marca Home" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: airport crystals.jpg y Method run.jpg</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q17.png" alt="Capturas de Google Maps con la marca Home" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: airport crystals.jpg y Method run.jpg</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>18. ¿Qué evidencia indica que Discord estuvo presente o se usó?</summary>
@@ -223,7 +223,7 @@
                                 <dt>Interpretación</dt><dd>Discord estuvo presente y se ejecutó al menos una vez, porque la caché se genera con el uso.</dd>
                                 <dt>Limitación</dt><dd>Sin mensajes verificables no se pueden determinar conversaciones, interlocutores ni autoría.</dd>
                             </dl>
-                            <figure class="shot"><img src="../img/pr03/q18.png" alt="Caché de Discord en Autopsy" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: carpeta Discord</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q18.png" alt="Caché de Discord en Autopsy" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: carpeta Discord</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>19. Esteganografía y cifrado: descarga, instalación, ejecución y uso efectivo</summary>
@@ -233,7 +233,7 @@
                                 <dt>TrueCrypt 7.1a</dt><dd>Descarga: instalador creado el 2019-01-30 12:27:43 NZDT. Instalación: <code>Program Files\TrueCrypt\</code>. Ejecución: BAM, SRUDB y Prefetch. Uso efectivo: no evidenciado.</dd>
                                 <dt>Conclusión</dt><dd>Ambas herramientas se descargaron, instalaron y ejecutaron; ejecutar no demuestra que produjeran un resultado.</dd>
                             </dl>
-                            <figure class="shot"><img src="../img/pr03/q19.png" alt="Evidencias de TrueCrypt e Image Steganography" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: Prefetch y ProgData</figcaption></figure>
+                            <figure class="shot"><img src="../Images/q19.png" alt="Evidencias de TrueCrypt e Image Steganography" onerror="this.parentElement.classList.add('empty')"><figcaption>Captura: Prefetch y ProgData</figcaption></figure>
                         </div></details>
 
                     <details class="qa"><summary>20. Hipótesis, explicación alternativa, hallazgos y evidencias adicionales</summary>

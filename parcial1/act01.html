@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 01 - Análisis de Ciberataque | Portafolio WAP</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="side-ornament left"></div>
+    <div class="side-ornament right"></div>
+
+    <div class="luxury-container fade-in">
+        
+        <header class="luxury-header">
+            <div class="header-content">
+                <h1>Actividad 01</h1>
+                <p class="alias">"Análisis en grupo de un ciberataque real y su impacto empresarial"</p>
+                <h2>Ciberataque al Banco de Chile (2018)</h2>
+                <p class="institution">
+                    <a href="index.html" style="color: var(--accent-dark); text-decoration: none;">← Volver al Portafolio</a>
+                </p>
+            </div>
+        </header>
+
+        <main class="luxury-main">
+
+            <!-- PDF Download -->
+            <section class="evidence-card" style="text-align: center; border-left: 4px solid var(--accent-dark);">
+                <div class="card-number">PDF</div>
+                <h3>Informe Completo del Equipo</h3>
+                <p>Informe analítico estructurado con cronología, tablas técnicas, evaluación CIA, estimación de costos y recomendaciones. Elaborado en equipo.</p>
+                <a href="Equipo2-act01.pdf" download class="btn-luxury" style="display: inline-block; text-decoration: none; margin-top: 15px;">
+                    Descargar Informe PDF 📄
+                </a>
+            </section>
+
+            <!-- Objetivos -->
+            <section class="evidence-card">
+                <div class="card-number">01</div>
+                <h3>Objetivos de la Actividad</h3>
+                <p><strong>Objetivo General:</strong> Analizar de manera técnica, económica y estratégica un ciberataque real ocurrido en una empresa o infraestructura crítica, identificando sus causas, desarrollo, impacto y consecuencias, con el fin de comprender la importancia de la ciberseguridad y su relación directa con la sostenibilidad económica y operativa de las organizaciones.</p>
+                
+                <p><strong>Objetivos específicos:</strong></p>
+                <ul>
+                    <li>Examinar un caso real de ciberataque mediante fuentes verificables.</li>
+                    <li>Identificar los tipos de amenazas, actores y vectores de ataque involucrados.</li>
+                    <li>Evaluar el impacto del incidente sobre los principios de confidencialidad, integridad y disponibilidad (CIA).</li>
+                    <li>Calcular el costo total del ciberataque en moneda mexicana.</li>
+                    <li>Relacionar el caso con marcos internacionales de ciberseguridad (ISO 27001, NIST, GDPR, etc.).</li>
+                    <li>Formular recomendaciones preventivas y lecciones aprendidas.</li>
+                </ul>
+            </section>
+
+            <!-- Contexto -->
+            <section class="evidence-card">
+                <div class="card-number">02</div>
+                <h3>Contexto General del Ataque</h3>
+                <p>El <strong>24 de mayo de 2018</strong>, el Banco de Chile fue víctima de un ciberataque sofisticado atribuido al grupo <strong>APT38</strong> (vinculado a Corea del Norte / Lazarus Group).</p>
+                <p>Los atacantes utilizaron malware destructivo como distracción mientras ejecutaban transferencias fraudulentas a través del sistema <strong>SWIFT</strong> por aproximadamente <strong>US$10 millones</strong> hacia cuentas en el extranjero (principalmente Hong Kong).</p>
+                <p>El incidente afectó miles de equipos y puso en evidencia debilidades en la segmentación de red, monitoreo de sistemas críticos y controles sobre operaciones financieras internacionales.</p>
+            </section>
+
+            <!-- Cronología -->
+            <section class="evidence-card">
+                <div class="card-number">03</div>
+                <h3>Cronología del Incidente</h3>
+                <p>Línea de tiempo de las principales etapas del ataque:</p>
+                <ul>
+                    <li><strong>Antes del 24 de mayo 2018:</strong> Intrusión y preparación (reconocimiento y acceso a sistemas SWIFT).</li>
+                    <li><strong>24 de mayo 2018:</strong> Aparición de malware destructivo que afectó numerosos equipos.</li>
+                    <li><strong>24-25 de mayo 2018:</strong> El malware actúa como distracción mientras se ejecutan las transferencias fraudulentas.</li>
+                    <li><strong>9 de junio 2018:</strong> El banco confirma públicamente el robo de ~US$10 millones.</li>
+                    <li><strong>Octubre 2018:</strong> FireEye/Mandiant vincula el ataque con APT38.</li>
+                </ul>
+            </section>
+
+            <!-- Tabla Técnica -->
+            <section class="evidence-card">
+                <div class="card-number">04</div>
+                <h3>Caracterización Técnica del Ataque</h3>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem;">
+                        <thead>
+                            <tr style="background: var(--accent-dark); color: white;">
+                                <th style="padding: 10px; text-align: left;">Elemento</th>
+                                <th style="padding: 10px; text-align: left;">Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 10px;"><strong>Tipo de ataque</strong></td>
+                                <td style="padding: 10px;">Robo cibernético financiero (fraude SWIFT) + malware destructivo (wiper/ransomware) como distracción</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 10px;"><strong>Actor</strong></td>
+                                <td style="padding: 10px;">APT38 / Lazarus Group (Corea del Norte)</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 10px;"><strong>Vector de entrada</strong></td>
+                                <td style="padding: 10px;">Watering holes, servidores Linux vulnerables, spear-phishing</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 10px;"><strong>Vulnerabilidades</strong></td>
+                                <td style="padding: 10px;">Apache Struts2, CVE-2016-4119, CVE-2016-1019, CVE-2015-8651 + credenciales comprometidas</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 10px;"><strong>Etapas (MITRE)</strong></td>
+                                <td style="padding: 10px;">Recopilación → Compromiso inicial → Reconocimiento → Pivote a SWIFT → Transferencia → Destrucción de evidencia</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;"><strong>Duración</strong></td>
+                                <td style="padding: 10px;">Promedio de 155 días de permanencia (reconocimiento previo al robo)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- CIA -->
+            <section class="evidence-card">
+                <div class="card-number">05</div>
+                <h3>Evaluación del Impacto (Modelo CIA)</h3>
+                <ul>
+                    <li><strong>Confidencialidad:</strong> Exfiltración de credenciales de alto nivel y mapas de red. Acceso no autorizado a la plataforma SWIFT.</li>
+                    <li><strong>Integridad:</strong> Alteración del Master Boot Record (MBR) de miles de equipos y adulteración de órdenes de pago fraudulentas.</li>
+                    <li><strong>Disponibilidad:</strong> Interrupción masiva de sistemas. Miles de computadoras y servidores inutilizados temporalmente.</li>
+                </ul>
+            </section>
+
+            <!-- Costos -->
+            <section class="evidence-card">
+                <div class="card-number">06</div>
+                <h3>Estimación de Costos</h3>
+                <p>El análisis de costos (en pesos mexicanos) considera pérdidas operativas, daños reputacionales, costos técnicos de recuperación, costos legales/regulatorios y el monto del fraude (~US$10 millones).</p>
+                <p>La comparación con el presupuesto anual de ciberseguridad del sector financiero permite dimensionar el impacto económico del incidente.</p>
+            </section>
+
+            <!-- Lecciones -->
+            <section class="evidence-card">
+                <div class="card-number">07</div>
+                <h3>Lecciones Aprendidas y Recomendaciones</h3>
+                <p><strong>Fallas críticas detectadas:</strong></p>
+                <ul>
+                    <li>Segmentación insuficiente entre red corporativa y sistemas financieros.</li>
+                    <li>Monitoreo y detección insuficientes durante las fases previas.</li>
+                    <li>Dificultad para correlacionar incidentes destructivos con fraude financiero simultáneo.</li>
+                </ul>
+                <p><strong>Recomendaciones aplicables al contexto mexicano/latinoamericano:</strong></p>
+                <ul>
+                    <li>Implementar defensa en profundidad y segmentación estricta.</li>
+                    <li>Fortalecer controles sobre operaciones SWIFT y sistemas críticos.</li>
+                    <li>Mejorar capacidades de detección, respuesta y coordinación sectorial.</li>
+                    <li>Adoptar marcos como ISO 27001, NIST CSF y mejores prácticas de gobernanza del riesgo cibernético.</li>
+                </ul>
+            </section>
+
+            <!-- Conclusiones -->
+            <section class="evidence-card">
+                <div class="card-number">08</div>
+                <h3>Conclusiones</h3>
+                <p>El caso del Banco de Chile demuestra cómo un ataque sofisticado de APT38 puede combinar sabotaje operativo con fraude financiero de alto impacto. El uso de malware destructivo como cortina de humo evidencia la necesidad de capacidades de correlación avanzadas y defensa en profundidad en instituciones financieras.</p>
+                <p>Este análisis refuerza la importancia de la ciberseguridad como elemento estratégico para la sostenibilidad operativa y económica de las organizaciones, especialmente en el sector financiero latinoamericano.</p>
+            </section>
+
+            <!-- Integrantes -->
+            <section class="evidence-card">
+                <div class="card-number">09</div>
+                <h3>Integrantes del Equipo</h3>
+                <ul>
+                    <li>Luis Emmanuel Aronia Silva – 182979</li>
+                    <li>Erik Del Angel Arriaga Torres – 181653</li>
+                    <li>Lizbeth Guerrero Hurtado – 172068</li>
+                    <li>Guzmán Martínez Bryhan Eduardo – 178508</li>
+                    <li>Lopez Alcocer Monica Isabel – 179827</li>
+                    <li>Bruno Axel Puente Luna – 177876</li>
+                    <li>Magdalena Yesenia Tristán Rivera – 174702</li>
+                </ul>
+                <p style="margin-top: 15px;"><em>CNO IV Programación WAP – Maestro: Servando López Contreras</em></p>
+            </section>
+
+        </main>
+
+        <footer class="luxury-footer">
+            <p>&copy; 2026 Luis Emmanuel Aronia Silva. Portafolio de Evidencias – Programación WAP.</p>
+        </footer>
+    </div>
+</body>
+</html>
